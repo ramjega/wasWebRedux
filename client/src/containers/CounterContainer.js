@@ -7,22 +7,16 @@ import { connect } from 'react-redux'
 import * as CounterActions from '../actions/counter'
 
 class CounterContainer extends React.Component {
-  static propTypes = {
-    increment: PropTypes.func.isRequired,
-    decrement: PropTypes.func.isRequired,
-    incrementIfOdd: PropTypes.func.isRequired,
-    counter: PropTypes.number.isRequired,
-  }
 
-  increment = () => {
+  increment(){
     this.props.increment()
   }
 
-  decrement = () => {
+  decrement(){
     this.props.decrement()
   }
 
-  incrementIfOdd = () => {
+  incrementIfOdd() {
     this.props.incrementIfOdd()
   }
 
@@ -30,12 +24,19 @@ class CounterContainer extends React.Component {
     return (
       <Counter
         counter={this.props.counter}
-        increment={this.increment}
-        decrement={this.decrement}
-        incrementIfOdd={this.incrementIfOdd}
+        increment={this.increment.bind(this)}
+        decrement={this.decrement.bind(this)}
+        incrementIfOdd={this.incrementIfOdd.bind(this)}
       />
     )
   }
+}
+
+CounterContainer.propTypes = {
+  increment: PropTypes.func.isRequired,
+  decrement: PropTypes.func.isRequired,
+  incrementIfOdd: PropTypes.func.isRequired,
+  counter: PropTypes.number.isRequired,
 }
 
 function mapStateToProps(state) {

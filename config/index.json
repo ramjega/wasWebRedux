@@ -1,0 +1,4 @@
+{
+  "dbUri": "mongodb://was:Was12345@ds263295.mlab.com:63295/was",
+  "jwtSecret": "a secret phrase!!"
+}
