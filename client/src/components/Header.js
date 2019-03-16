@@ -1,34 +1,237 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { keyframes } from '@emotion/core'
+import React from 'react';
+import {  Link } from 'react-router';
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import { withStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
-const rotate360 = keyframes`
-  from {
-    transform: rotate(0deg);
+const styles = theme => ({
+  root: {
+    width: '100%',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+  },
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing.unit * 3,
+      width: 'auto',
+    },
+  },
+  searchIcon: {
+    width: theme.spacing.unit * 9,
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputRoot: {
+    color: 'inherit',
+    width: '100%',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 200,
+    },
+  },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
+});
+
+class Header extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null,
+      mobileMoreAnchorEl: null,
+    };
   }
-  to {
-    transform: rotate(360deg);
+
+
+  handleProfileMenuOpen(event){
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleMenuClose(){
+    this.setState({ anchorEl: null });
+    this.handleMobileMenuClose();
+  };
+
+  handleMobileMenuOpen(event){
+    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  };
+
+  handleMobileMenuClose(){
+    this.setState({ mobileMoreAnchorEl: null });
+  };
+
+  render() {
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
+    const { classes } = this.props;
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+    const renderMenu = (
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <Link to="/signIn"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign In</MenuItem></Link>
+        <Link to="/signUp"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Up</MenuItem></Link>
+      </Menu>
+    );
+
+    const renderMobileMenu = (
+      <Menu
+        anchorEl={mobileMoreAnchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMobileMenuOpen}
+        onClose={this.handleMenuClose}
+      >
+        <MenuItem onClick={this.handleMobileMenuClose.bind(this)}>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <p>Messages</p>
+        </MenuItem>
+        <MenuItem onClick={this.handleMobileMenuClose.bind(this)}>
+          <IconButton color="inherit">
+            <Badge badgeContent={11} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <p>Notifications</p>
+        </MenuItem>
+        <MenuItem onClick={this.handleProfileMenuOpen.bind(this)}>
+          <IconButton color="inherit">
+            <AccountCircle />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </Menu>
+    );
+
+    return (
+      <div className={classes.root}>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+              <MenuIcon />
+            </IconButton>
+            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
+              <Link to="/" className={classes.title} style={{ color: '#FFF' }}>
+                WAS
+              </Link>
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+              />
+            </div>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton color="inherit">
+                <Badge badgeContent={4} color="secondary">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton color="inherit">
+                <Badge badgeContent={17} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleProfileMenuOpen.bind(this)}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen.bind(this)} color="inherit">
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMenu}
+        {renderMobileMenu}
+
+        {this.props.children}
+      </div>
+    );
   }
-`
-
-const TopBar = styled.div`
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: #fff;
-
-  .redux-logo {
-    animation: ${rotate360} infinite 20s linear;
-    height: 80px;
-  }
-`
-
-function Header() {
-  return (
-    <TopBar>
-      <h2>Welcome to Create Redux App</h2>
-    </TopBar>
-  )
 }
 
-export default Header
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+  children: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(Header);
