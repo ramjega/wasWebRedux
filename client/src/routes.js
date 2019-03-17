@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import SignInPage from "./containers/SignInPage";
+import SignInPage from "./components/SignInForm";
 import SignUpPage from "./containers/SignUpPage";
 import Home from "./components/Home";
 

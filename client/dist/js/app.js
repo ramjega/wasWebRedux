@@ -62,7 +62,7 @@
 
 	var _index4 = _interopRequireDefault(_index3);
 
-	var _serviceWorker = __webpack_require__(356);
+	var _serviceWorker = __webpack_require__(358);
 
 	var serviceWorker = _interopRequireWildcard(_serviceWorker);
 
@@ -28227,10 +28227,15 @@
 
 	var _counter2 = _interopRequireDefault(_counter);
 
+	var _signUp = __webpack_require__(483);
+
+	var _signUp2 = _interopRequireDefault(_signUp);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	  counter: _counter2.default
+	  counter: _counter2.default,
+	  signUp: _signUp2.default
 	});
 
 	exports.default = rootReducer;
@@ -28280,7 +28285,8 @@
 	exports.default = {
 	  // Counter
 	  INCREMENT_COUNTER: 'INCREMENT_COUNTER',
-	  DECREMENT_COUNTER: 'DECREMENT_COUNTER'
+	  DECREMENT_COUNTER: 'DECREMENT_COUNTER',
+	  SIGN_UP: 'SIGN_UP'
 	};
 
 /***/ }),
@@ -54606,15 +54612,15 @@
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _SignInPage = __webpack_require__(360);
+	var _SignInForm = __webpack_require__(359);
 
-	var _SignInPage2 = _interopRequireDefault(_SignInPage);
+	var _SignInForm2 = _interopRequireDefault(_SignInForm);
 
-	var _SignUpPage = __webpack_require__(361);
+	var _SignUpPage = __webpack_require__(356);
 
 	var _SignUpPage2 = _interopRequireDefault(_SignUpPage);
 
-	var _Home = __webpack_require__(359);
+	var _Home = __webpack_require__(357);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
@@ -54628,7 +54634,7 @@
 	    component: _Home2.default
 	  }, {
 	    path: '/signIn',
-	    component: _SignInPage2.default
+	    component: _SignInForm2.default
 	  }, {
 	    path: '/signUp',
 	    component: _SignUpPage2.default
@@ -57415,6 +57421,162 @@
 /* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _propTypes = __webpack_require__(22);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _SignUpForm = __webpack_require__(360);
+
+	var _SignUpForm2 = _interopRequireDefault(_SignUpForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SignUpPage = function (_React$Component) {
+	  _inherits(SignUpPage, _React$Component);
+
+	  function SignUpPage(props, context) {
+	    _classCallCheck(this, SignUpPage);
+
+	    var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props, context));
+
+	    _this.state = {
+	      errors: {},
+	      user: {}
+	    };
+	    return _this;
+	  }
+
+	  _createClass(SignUpPage, [{
+	    key: 'processForm',
+	    value: function processForm(event) {
+	      var _this2 = this;
+
+	      event.preventDefault();
+	      // create a string for an HTTP body message
+	      var name = encodeURIComponent(this.state.user.name);
+	      var email = encodeURIComponent(this.state.user.email);
+	      var password = encodeURIComponent(this.state.user.password);
+
+	      var formData = 'name=' + name + '&email=' + email + '&password=' + password;
+
+	      // create an AJAX request
+	      var xhr = new XMLHttpRequest();
+	      xhr.open('post', '/auth/signup');
+	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	      xhr.responseType = 'json';
+	      xhr.addEventListener('load', function () {
+	        if (xhr.status === 200) {
+	          // success
+	          // change the component-container state
+	          _this2.setState({
+	            errors: {}
+	          });
+
+	          // set a message
+	          localStorage.setItem('successMessage', xhr.response.message);
+
+	          // make a redirect
+	          _this2.context.router.replace('/login');
+	        } else {
+	          // failure
+	          var errors = xhr.response.errors ? xhr.response.errors : {};
+	          errors.summary = xhr.response.message;
+
+	          _this2.setState({
+	            errors: errors
+	          });
+	        }
+	      });
+	      xhr.send(formData);
+	    }
+	  }, {
+	    key: 'changeUser',
+	    value: function changeUser(event) {
+	      var field = event.target.name;
+	      var user = this.state.user;
+	      user[field] = event.target.value;
+
+	      this.setState({
+	        user: user
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(_SignUpForm2.default, {
+	        onSubmit: this.processForm.bind(this),
+	        onChange: this.changeUser.bind(this),
+	        errors: this.state.errors,
+	        user: this.state.user
+	      });
+	    }
+	  }]);
+
+	  return SignUpPage;
+	}(_react2.default.Component);
+
+	SignUpPage.contextTypes = {
+	  router: _propTypes2.default.object.isRequired
+	};
+
+	exports.default = SignUpPage;
+
+/***/ }),
+/* 357 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function Home() {
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "container-fluid" },
+	    _react2.default.createElement(
+	      "center",
+	      null,
+	      _react2.default.createElement(
+	        "h1",
+	        null,
+	        "WAS home page"
+	      )
+	    )
+	  );
+	}
+
+	exports.default = Home;
+
+/***/ }),
+/* 358 */
+/***/ (function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -57540,12 +57702,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 357 */,
-/* 358 */,
 /* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -57555,25 +57715,164 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _propTypes = __webpack_require__(22);
+
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+
+	var _Avatar = __webpack_require__(333);
+
+	var _Avatar2 = _interopRequireDefault(_Avatar);
+
+	var _Button = __webpack_require__(335);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _CssBaseline = __webpack_require__(337);
+
+	var _CssBaseline2 = _interopRequireDefault(_CssBaseline);
+
+	var _FormControl = __webpack_require__(339);
+
+	var _FormControl2 = _interopRequireDefault(_FormControl);
+
+	var _FormControlLabel = __webpack_require__(341);
+
+	var _FormControlLabel2 = _interopRequireDefault(_FormControlLabel);
+
+	var _Checkbox = __webpack_require__(343);
+
+	var _Checkbox2 = _interopRequireDefault(_Checkbox);
+
+	var _Input = __webpack_require__(349);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _InputLabel = __webpack_require__(351);
+
+	var _InputLabel2 = _interopRequireDefault(_InputLabel);
+
+	var _LockOutlined = __webpack_require__(355);
+
+	var _LockOutlined2 = _interopRequireDefault(_LockOutlined);
+
+	var _Paper = __webpack_require__(214);
+
+	var _Paper2 = _interopRequireDefault(_Paper);
+
+	var _Typography = __webpack_require__(239);
+
+	var _Typography2 = _interopRequireDefault(_Typography);
+
+	var _withStyles = __webpack_require__(126);
+
+	var _withStyles2 = _interopRequireDefault(_withStyles);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function Home() {
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var styles = function styles(theme) {
+	  return {
+	    main: _defineProperty({
+	      width: 'auto',
+	      display: 'block', // Fix IE 11 issue.
+	      marginLeft: theme.spacing.unit * 3,
+	      marginRight: theme.spacing.unit * 3
+	    }, theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2), {
+	      width: 400,
+	      marginLeft: 'auto',
+	      marginRight: 'auto'
+	    }),
+	    paper: {
+	      marginTop: theme.spacing.unit * 8,
+	      display: 'flex',
+	      flexDirection: 'column',
+	      alignItems: 'center',
+	      padding: theme.spacing.unit * 2 + 'px ' + theme.spacing.unit * 3 + 'px ' + theme.spacing.unit * 3 + 'px'
+	    },
+	    avatar: {
+	      margin: theme.spacing.unit,
+	      backgroundColor: theme.palette.secondary.main
+	    },
+	    form: {
+	      width: '100%', // Fix IE 11 issue.
+	      marginTop: theme.spacing.unit
+	    },
+	    submit: {
+	      marginTop: theme.spacing.unit * 3
+	    }
+	  };
+	};
+
+	function SignInForm(props) {
+	  var classes = props.classes;
+
+
 	  return _react2.default.createElement(
-	    "div",
-	    { className: "container-fluid" },
+	    'main',
+	    { className: classes.main },
+	    _react2.default.createElement(_CssBaseline2.default, null),
 	    _react2.default.createElement(
-	      "center",
-	      null,
+	      _Paper2.default,
+	      { className: classes.paper },
 	      _react2.default.createElement(
-	        "h1",
-	        null,
-	        "WAS home page"
+	        _Avatar2.default,
+	        { className: classes.avatar },
+	        _react2.default.createElement(_LockOutlined2.default, null)
+	      ),
+	      _react2.default.createElement(
+	        _Typography2.default,
+	        { component: 'h1', variant: 'h5' },
+	        'Sign in'
+	      ),
+	      _react2.default.createElement(
+	        'form',
+	        { className: classes.form },
+	        _react2.default.createElement(
+	          _FormControl2.default,
+	          { margin: 'normal', required: true, fullWidth: true },
+	          _react2.default.createElement(
+	            _InputLabel2.default,
+	            { htmlFor: 'email' },
+	            'Email Address'
+	          ),
+	          _react2.default.createElement(_Input2.default, { id: 'email', name: 'email', autoComplete: 'email', autoFocus: true })
+	        ),
+	        _react2.default.createElement(
+	          _FormControl2.default,
+	          { margin: 'normal', required: true, fullWidth: true },
+	          _react2.default.createElement(
+	            _InputLabel2.default,
+	            { htmlFor: 'password' },
+	            'Password'
+	          ),
+	          _react2.default.createElement(_Input2.default, { name: 'password', type: 'password', id: 'password', autoComplete: 'current-password' })
+	        ),
+	        _react2.default.createElement(_FormControlLabel2.default, {
+	          control: _react2.default.createElement(_Checkbox2.default, { value: 'remember', color: 'primary' }),
+	          label: 'Remember me'
+	        }),
+	        _react2.default.createElement(
+	          _Button2.default,
+	          {
+	            type: 'submit',
+	            fullWidth: true,
+	            variant: 'contained',
+	            color: 'primary',
+	            className: classes.submit
+	          },
+	          'Sign in'
+	        )
 	      )
 	    )
 	  );
 	}
 
-	exports.default = Home;
+	SignInForm.propTypes = {
+	  classes: _propTypes2.default.object.isRequired
+	};
+
+	exports.default = (0, _withStyles2.default)(styles)(SignInForm);
 
 /***/ }),
 /* 360 */
@@ -57678,8 +57977,12 @@
 	  };
 	};
 
-	function SignInPage(props) {
-	  var classes = props.classes;
+	function SignUpForm(props) {
+	  var classes = props.classes,
+	      onChange = props.onChange,
+	      onSubmit = props.onSubmit,
+	      errors = props.errors,
+	      user = props.user;
 
 
 	  return _react2.default.createElement(
@@ -57697,11 +58000,26 @@
 	      _react2.default.createElement(
 	        _Typography2.default,
 	        { component: 'h1', variant: 'h5' },
-	        'Sign in'
+	        'Sign Up',
+	        errors.summary && _react2.default.createElement(
+	          'p',
+	          { className: 'error-message' },
+	          errors.summary
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'form',
-	        { className: classes.form },
+	        { className: classes.form, onSubmit: onSubmit },
+	        _react2.default.createElement(
+	          _FormControl2.default,
+	          { margin: 'normal', required: true, fullWidth: true },
+	          _react2.default.createElement(
+	            _InputLabel2.default,
+	            { htmlFor: 'name' },
+	            'Name'
+	          ),
+	          _react2.default.createElement(_Input2.default, { onChange: onChange, id: 'name', value: user.name, name: 'name', autoComplete: 'User ame', autoFocus: true })
+	        ),
 	        _react2.default.createElement(
 	          _FormControl2.default,
 	          { margin: 'normal', required: true, fullWidth: true },
@@ -57710,7 +58028,7 @@
 	            { htmlFor: 'email' },
 	            'Email Address'
 	          ),
-	          _react2.default.createElement(_Input2.default, { id: 'email', name: 'email', autoComplete: 'email', autoFocus: true })
+	          _react2.default.createElement(_Input2.default, { onChange: onChange, id: 'email', value: user.email, name: 'email', autoComplete: 'email', autoFocus: true })
 	        ),
 	        _react2.default.createElement(
 	          _FormControl2.default,
@@ -57720,7 +58038,7 @@
 	            { htmlFor: 'password' },
 	            'Password'
 	          ),
-	          _react2.default.createElement(_Input2.default, { name: 'password', type: 'password', id: 'password', autoComplete: 'current-password' })
+	          _react2.default.createElement(_Input2.default, { onChange: onChange, name: 'password', type: 'password', id: 'password', value: user.password, autoComplete: 'current-password' })
 	        ),
 	        _react2.default.createElement(_FormControlLabel2.default, {
 	          control: _react2.default.createElement(_Checkbox2.default, { value: 'remember', color: 'primary' }),
@@ -57742,14 +58060,140 @@
 	  );
 	}
 
-	SignInPage.propTypes = {
-	  classes: _propTypes2.default.object.isRequired
+	SignUpForm.propTypes = {
+	  classes: _propTypes2.default.object.isRequired,
+	  onSubmit: _propTypes2.default.func.isRequired,
+	  onChange: _propTypes2.default.func.isRequired,
+	  errors: _propTypes2.default.object.isRequired,
+	  user: _propTypes2.default.object.isRequired
 	};
 
-	exports.default = (0, _withStyles2.default)(styles)(SignInPage);
+	exports.default = (0, _withStyles2.default)(styles)(SignUpForm);
 
 /***/ }),
-/* 361 */
+/* 361 */,
+/* 362 */,
+/* 363 */,
+/* 364 */,
+/* 365 */,
+/* 366 */,
+/* 367 */,
+/* 368 */,
+/* 369 */,
+/* 370 */,
+/* 371 */,
+/* 372 */,
+/* 373 */,
+/* 374 */,
+/* 375 */,
+/* 376 */,
+/* 377 */,
+/* 378 */,
+/* 379 */,
+/* 380 */,
+/* 381 */,
+/* 382 */,
+/* 383 */,
+/* 384 */,
+/* 385 */,
+/* 386 */,
+/* 387 */,
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */,
+/* 398 */,
+/* 399 */,
+/* 400 */,
+/* 401 */,
+/* 402 */,
+/* 403 */,
+/* 404 */,
+/* 405 */,
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57757,179 +58201,27 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.default = signUp;
 
-	var _react = __webpack_require__(1);
+	var _actionTypes = __webpack_require__(55);
 
-	var _react2 = _interopRequireDefault(_react);
-
-	var _propTypes = __webpack_require__(22);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _Avatar = __webpack_require__(333);
-
-	var _Avatar2 = _interopRequireDefault(_Avatar);
-
-	var _Button = __webpack_require__(335);
-
-	var _Button2 = _interopRequireDefault(_Button);
-
-	var _CssBaseline = __webpack_require__(337);
-
-	var _CssBaseline2 = _interopRequireDefault(_CssBaseline);
-
-	var _FormControl = __webpack_require__(339);
-
-	var _FormControl2 = _interopRequireDefault(_FormControl);
-
-	var _FormControlLabel = __webpack_require__(341);
-
-	var _FormControlLabel2 = _interopRequireDefault(_FormControlLabel);
-
-	var _Checkbox = __webpack_require__(343);
-
-	var _Checkbox2 = _interopRequireDefault(_Checkbox);
-
-	var _Input = __webpack_require__(349);
-
-	var _Input2 = _interopRequireDefault(_Input);
-
-	var _InputLabel = __webpack_require__(351);
-
-	var _InputLabel2 = _interopRequireDefault(_InputLabel);
-
-	var _LockOutlined = __webpack_require__(355);
-
-	var _LockOutlined2 = _interopRequireDefault(_LockOutlined);
-
-	var _Paper = __webpack_require__(214);
-
-	var _Paper2 = _interopRequireDefault(_Paper);
-
-	var _Typography = __webpack_require__(239);
-
-	var _Typography2 = _interopRequireDefault(_Typography);
-
-	var _withStyles = __webpack_require__(126);
-
-	var _withStyles2 = _interopRequireDefault(_withStyles);
+	var _actionTypes2 = _interopRequireDefault(_actionTypes);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	var initialState = 0;
 
-	var styles = function styles(theme) {
-	  return {
-	    main: _defineProperty({
-	      width: 'auto',
-	      display: 'block', // Fix IE 11 issue.
-	      marginLeft: theme.spacing.unit * 3,
-	      marginRight: theme.spacing.unit * 3
-	    }, theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2), {
-	      width: 400,
-	      marginLeft: 'auto',
-	      marginRight: 'auto'
-	    }),
-	    paper: {
-	      marginTop: theme.spacing.unit * 8,
-	      display: 'flex',
-	      flexDirection: 'column',
-	      alignItems: 'center',
-	      padding: theme.spacing.unit * 2 + 'px ' + theme.spacing.unit * 3 + 'px ' + theme.spacing.unit * 3 + 'px'
-	    },
-	    avatar: {
-	      margin: theme.spacing.unit,
-	      backgroundColor: theme.palette.secondary.main
-	    },
-	    form: {
-	      width: '100%', // Fix IE 11 issue.
-	      marginTop: theme.spacing.unit
-	    },
-	    submit: {
-	      marginTop: theme.spacing.unit * 3
-	    }
-	  };
-	};
+	function signUp() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
 
-	function SignUpPage(props) {
-	  var classes = props.classes;
-
-
-	  return _react2.default.createElement(
-	    'main',
-	    { className: classes.main },
-	    _react2.default.createElement(_CssBaseline2.default, null),
-	    _react2.default.createElement(
-	      _Paper2.default,
-	      { className: classes.paper },
-	      _react2.default.createElement(
-	        _Avatar2.default,
-	        { className: classes.avatar },
-	        _react2.default.createElement(_LockOutlined2.default, null)
-	      ),
-	      _react2.default.createElement(
-	        _Typography2.default,
-	        { component: 'h1', variant: 'h5' },
-	        'Sign Up'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        { className: classes.form },
-	        _react2.default.createElement(
-	          _FormControl2.default,
-	          { margin: 'normal', required: true, fullWidth: true },
-	          _react2.default.createElement(
-	            _InputLabel2.default,
-	            { htmlFor: 'userName' },
-	            'Email Address'
-	          ),
-	          _react2.default.createElement(_Input2.default, { id: 'userName', name: 'userName', autoComplete: 'User ame', autoFocus: true })
-	        ),
-	        _react2.default.createElement(
-	          _FormControl2.default,
-	          { margin: 'normal', required: true, fullWidth: true },
-	          _react2.default.createElement(
-	            _InputLabel2.default,
-	            { htmlFor: 'email' },
-	            'Email Address'
-	          ),
-	          _react2.default.createElement(_Input2.default, { id: 'email', name: 'email', autoComplete: 'email', autoFocus: true })
-	        ),
-	        _react2.default.createElement(
-	          _FormControl2.default,
-	          { margin: 'normal', required: true, fullWidth: true },
-	          _react2.default.createElement(
-	            _InputLabel2.default,
-	            { htmlFor: 'password' },
-	            'Password'
-	          ),
-	          _react2.default.createElement(_Input2.default, { name: 'password', type: 'password', id: 'password', autoComplete: 'current-password' })
-	        ),
-	        _react2.default.createElement(_FormControlLabel2.default, {
-	          control: _react2.default.createElement(_Checkbox2.default, { value: 'remember', color: 'primary' }),
-	          label: 'Remember me'
-	        }),
-	        _react2.default.createElement(
-	          _Button2.default,
-	          {
-	            type: 'submit',
-	            fullWidth: true,
-	            variant: 'contained',
-	            color: 'primary',
-	            className: classes.submit
-	          },
-	          'Sign in'
-	        )
-	      )
-	    )
-	  );
+	  switch (action.type) {
+	    case _actionTypes2.default.SIGN_UP:
+	      return state + 1;
+	    default:
+	      return state;
+	  }
 	}
-
-	SignUpPage.propTypes = {
-	  classes: _propTypes2.default.object.isRequired
-	};
-
-	exports.default = (0, _withStyles2.default)(styles)(SignUpPage);
 
 /***/ })
 /******/ ]);
