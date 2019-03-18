@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../components/Header'
+import Header from '../base/components/Header'
 import {Router, browserHistory} from 'react-router'
 import styled from '@emotion/styled'
 import routes from "../routes.js";

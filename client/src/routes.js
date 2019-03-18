@@ -1,7 +1,7 @@
-import Header from "./components/Header";
+import Header from "./base/components/Header";
 import SignInPage from "./components/SignInForm";
-import SignUpPage from "./containers/SignUpPage";
-import Home from "./components/Home";
+import SignUpPage from "./authentication/SignUpPage";
+import Home from "./base/components/Home";
 
 
 const routes = {
