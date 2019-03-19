@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import counter from './counter'
-import signUp from './signUp'
+import signUp from '../authentication/reducer'
 
 const rootReducer = combineReducers({
   counter,

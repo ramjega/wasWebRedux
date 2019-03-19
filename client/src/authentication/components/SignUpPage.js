@@ -12,6 +12,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabe
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
+import * as SignUpActions from "../actions";
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   main: {
@@ -63,6 +66,7 @@ class SignUpPage extends React.Component {
   }
 
   onInputChange(event) {
+    this.props.setSignUpRequest();
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
@@ -173,6 +177,21 @@ SignUpPage.contextTypes = {
 
 SignUpPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  setSignUpRequest: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(SignUpPage);
+function mapStateToProps(state) {
+  return {
+    counter: state.counter,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(SignUpActions, dispatch)
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withStyles(styles)(SignUpPage))
+
