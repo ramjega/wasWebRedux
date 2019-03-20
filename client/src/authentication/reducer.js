@@ -5,9 +5,14 @@ export default function reducer(state = {
     email: '',
     password: ''
   },
+  signInRequest: {
+    email: '',
+    password: ''
+  },
   success: {},
-  errors:{
-    summary:''
+  errors: {
+    summary: '',
+
   },
   mutateState: 0
 
@@ -16,16 +21,28 @@ export default function reducer(state = {
     case 'SET_SIGN_UP_REQUEST':
       return {...state, signUpRequest: action.payload};
 
-    case 'SIGN_UP_PENDING':
-    {
+    case 'SET_SIGN_IN_REQUEST':
+      return {...state, signInRequest: action.payload};
+
+
+    case 'SIGN_UP_PENDING': {
       return {...state, mutateState: 1}
     }
-    case 'SIGN_UP_FULFILLED':
-    {
+    case 'SIGN_UP_FULFILLED': {
       return {...state, mutateState: 2, success: action.payload}
     }
-    case 'SIGN_UP_REJECTED':
-    {
+    case 'SIGN_UP_REJECTED': {
+      return {...state, mutateState: 3, errors: action.payload}
+    }
+
+
+    case 'SIGN_IN_PENDING': {
+      return {...state, mutateState: 1}
+    }
+    case 'SIGN_IN_FULFILLED': {
+      return {...state, mutateState: 2, success: action.payload}
+    }
+    case 'SIGN_IN_REJECTED': {
       return {...state, mutateState: 3, errors: action.payload}
     }
     default:

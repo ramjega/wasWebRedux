@@ -1,5 +1,5 @@
 import Header from "./base/components/Header";
-import SignInPage from "./components/SignInForm";
+import SignInPage from "./authentication/components/SignInPage";
 import SignUpPage from "./authentication/components/SignUpPage";
 import Home from "./base/components/Home";
 

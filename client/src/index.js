@@ -5,6 +5,37 @@ import configureStore from './store/index'
 import Routes from './routes/index'
 import * as serviceWorker from './utils/serviceWorker'
 
+window.safeGet = function () {
+  if (arguments.length < 2)
+    return null;
+
+  let object = arguments[0];
+  for (let i = 1; i < arguments.length; i++) {
+    try {
+      object = object[arguments[i]];
+    } catch (e) {
+      return null;
+    }
+  }
+  return object;
+};
+
+window.safeGetList = function () {
+  if (arguments.length < 2)
+    return [];
+
+  let object = arguments[0];
+  for (let i = 1; i < arguments.length; i++) {
+    try {
+      object = object[arguments[i]];
+    } catch (e) {
+      return [];
+    }
+  }
+  return object != null ? object : [];
+};
+
+
 render(
   <Provider store={configureStore()}>
     <Routes />

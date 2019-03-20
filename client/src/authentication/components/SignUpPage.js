@@ -57,24 +57,20 @@ class SignUpPage extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {
-      errors: {},
-    };
-
     this.onInputChange = this.onInputChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   onInputChange(event) {
     const field = event.target.name;
-    const {signUpRequest} = this.props.signUpReducer;
+    const {signUpRequest} = this.props.authenticationReducer;
     signUpRequest[field] = event.target.value;
     this.props.setSignUpRequest(signUpRequest);
   }
 
   onFormSubmit(event) {
     event.preventDefault();
-    const {signUpRequest} = this.props.signUpReducer;
+    const {signUpRequest} = this.props.authenticationReducer;
     // create a string for an HTTP body message
     const name = encodeURIComponent(signUpRequest.name);
     const email = encodeURIComponent(signUpRequest.email);
@@ -89,8 +85,10 @@ class SignUpPage extends React.Component {
   render() {
 
     const {classes} = this.props;
-    const {signUpRequest, errors} = this.props.signUpReducer;
+    const {signUpRequest, errors} = this.props.authenticationReducer;
+
     return (
+
       <main className={classes.main}>
         <CssBaseline/>
         <Paper className={classes.paper}>
@@ -100,24 +98,43 @@ class SignUpPage extends React.Component {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
+
           {errors.summary && <p className="error-message">{errors.summary}</p>}
+
           <form className={classes.form} onSubmit={this.onFormSubmit}>
+
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="name">Name</InputLabel>
-              <Input onChange={this.onInputChange} id="name" value={signUpRequest.name} name="name"
-                     autoComplete="User name" autoFocus/>
+              {errors.name ?
+                <Input error onChange={this.onInputChange} id="name" value={signUpRequest.name} name="name"
+                       autoComplete="User name" autoFocus/> :
+                <Input onChange={this.onInputChange} id="name" value={signUpRequest.name} name="name"
+                       autoComplete="User name" autoFocus/>
+              }
             </FormControl>
+
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input onChange={this.onInputChange} id="email" value={signUpRequest.email} name="email"
-                     autoComplete="email" autoFocus/>
+              {errors.email ?
+                <Input error onChange={this.onInputChange} id="email" value={signUpRequest.email} name="email"
+                       autoComplete="email" autoFocus/> :
+                <Input onChange={this.onInputChange} id="email" value={signUpRequest.email} name="email"
+                       autoComplete="email" autoFocus/>
+              }
             </FormControl>
+
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
-              <Input onChange={this.onInputChange} name="password" type="password" id="password"
-                     value={signUpRequest.password}
-                     autoComplete="current-password"/>
+              {errors.password ?
+                <Input error onChange={this.onInputChange} name="password" type="password" id="password"
+                       value={signUpRequest.password}
+                       autoComplete="current-password"/> :
+                <Input onChange={this.onInputChange} name="password" type="password" id="password"
+                       value={signUpRequest.password}
+                       autoComplete="current-password"/>
+              }
             </FormControl>
+
             <FormControlLabel
               control={<Checkbox value="remember" color="primary"/>}
               label="Remember me"
@@ -129,25 +146,25 @@ class SignUpPage extends React.Component {
               color="primary"
               className={classes.submit}
             >
-              Sign in
+              Sign Up
             </Button>
           </form>
+
           <br/>
           <Typography>
-            <p>Already have an account ?
-              <br/>
-              <center>
-                <Link href="/signIn" className={classes.link}>
-                  Sign In
-                </Link>
-              </center>
-            </p>
+            <p>Already have an account ?</p>
+
+            <center>
+              <Link href="/signIn" className={classes.link}>
+              Sign In
+            </Link>
+            </center>
           </Typography>
 
         </Paper>
       </main>
     )
-      ;
+
   }
 
 }
@@ -158,14 +175,14 @@ SignUpPage.contextTypes = {
 
 SignUpPage.propTypes = {
   classes: PropTypes.object.isRequired,
-  signUpReducer: PropTypes.object.isRequired,
+  authenticationReducer: PropTypes.object.isRequired,
   setSignUpRequest: PropTypes.func.isRequired,
   signUp: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    signUpReducer: state.signUpReducer,
+    authenticationReducer: state.authenticationReducer,
   }
 }
 

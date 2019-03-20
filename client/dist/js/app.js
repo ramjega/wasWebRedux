@@ -70,6 +70,34 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	window.safeGet = function () {
+	  if (arguments.length < 2) return null;
+
+	  var object = arguments[0];
+	  for (var i = 1; i < arguments.length; i++) {
+	    try {
+	      object = object[arguments[i]];
+	    } catch (e) {
+	      return null;
+	    }
+	  }
+	  return object;
+	};
+
+	window.safeGetList = function () {
+	  if (arguments.length < 2) return [];
+
+	  var object = arguments[0];
+	  for (var i = 1; i < arguments.length; i++) {
+	    try {
+	      object = object[arguments[i]];
+	    } catch (e) {
+	      return [];
+	    }
+	  }
+	  return object != null ? object : [];
+	};
+
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRedux.Provider,
 	  { store: (0, _index2.default)() },
@@ -28239,7 +28267,7 @@
 
 	var rootReducer = (0, _redux.combineReducers)({
 	  counter: _counter2.default,
-	  signUpReducer: _reducer2.default
+	  authenticationReducer: _reducer2.default
 	});
 
 	exports.default = rootReducer;
@@ -28313,9 +28341,14 @@
 	      email: '',
 	      password: ''
 	    },
+	    signInRequest: {
+	      email: '',
+	      password: ''
+	    },
 	    success: {},
 	    errors: {
 	      summary: ''
+
 	    },
 	    mutateState: 0
 
@@ -28326,6 +28359,9 @@
 	    case 'SET_SIGN_UP_REQUEST':
 	      return _extends({}, state, { signUpRequest: action.payload });
 
+	    case 'SET_SIGN_IN_REQUEST':
+	      return _extends({}, state, { signInRequest: action.payload });
+
 	    case 'SIGN_UP_PENDING':
 	      {
 	        return _extends({}, state, { mutateState: 1 });
@@ -28335,6 +28371,19 @@
 	        return _extends({}, state, { mutateState: 2, success: action.payload });
 	      }
 	    case 'SIGN_UP_REJECTED':
+	      {
+	        return _extends({}, state, { mutateState: 3, errors: action.payload });
+	      }
+
+	    case 'SIGN_IN_PENDING':
+	      {
+	        return _extends({}, state, { mutateState: 1 });
+	      }
+	    case 'SIGN_IN_FULFILLED':
+	      {
+	        return _extends({}, state, { mutateState: 2, success: action.payload });
+	      }
+	    case 'SIGN_IN_REJECTED':
 	      {
 	        return _extends({}, state, { mutateState: 3, errors: action.payload });
 	      }
@@ -54868,9 +54917,9 @@
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _SignInForm = __webpack_require__(335);
+	var _SignInPage = __webpack_require__(404);
 
-	var _SignInForm2 = _interopRequireDefault(_SignInForm);
+	var _SignInPage2 = _interopRequireDefault(_SignInPage);
 
 	var _SignUpPage = __webpack_require__(359);
 
@@ -54890,7 +54939,7 @@
 	    component: _Home2.default
 	  }, {
 	    path: '/signIn',
-	    component: _SignInForm2.default
+	    component: _SignInPage2.default
 	  }, {
 	    path: '/signUp',
 	    component: _SignUpPage2.default
@@ -54900,199 +54949,8 @@
 	exports.default = routes;
 
 /***/ }),
-/* 335 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _propTypes = __webpack_require__(22);
-
-	var _propTypes2 = _interopRequireDefault(_propTypes);
-
-	var _Avatar = __webpack_require__(336);
-
-	var _Avatar2 = _interopRequireDefault(_Avatar);
-
-	var _Button = __webpack_require__(338);
-
-	var _Button2 = _interopRequireDefault(_Button);
-
-	var _CssBaseline = __webpack_require__(340);
-
-	var _CssBaseline2 = _interopRequireDefault(_CssBaseline);
-
-	var _FormControl = __webpack_require__(342);
-
-	var _FormControl2 = _interopRequireDefault(_FormControl);
-
-	var _FormControlLabel = __webpack_require__(344);
-
-	var _FormControlLabel2 = _interopRequireDefault(_FormControlLabel);
-
-	var _Checkbox = __webpack_require__(346);
-
-	var _Checkbox2 = _interopRequireDefault(_Checkbox);
-
-	var _Input = __webpack_require__(352);
-
-	var _Input2 = _interopRequireDefault(_Input);
-
-	var _InputLabel = __webpack_require__(354);
-
-	var _InputLabel2 = _interopRequireDefault(_InputLabel);
-
-	var _LockOutlined = __webpack_require__(358);
-
-	var _LockOutlined2 = _interopRequireDefault(_LockOutlined);
-
-	var _Paper = __webpack_require__(217);
-
-	var _Paper2 = _interopRequireDefault(_Paper);
-
-	var _Typography = __webpack_require__(242);
-
-	var _Typography2 = _interopRequireDefault(_Typography);
-
-	var _withStyles = __webpack_require__(129);
-
-	var _withStyles2 = _interopRequireDefault(_withStyles);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var styles = function styles(theme) {
-	  return {
-	    main: _defineProperty({
-	      width: 'auto',
-	      display: 'block', // Fix IE 11 issue.
-	      marginLeft: theme.spacing.unit * 3,
-	      marginRight: theme.spacing.unit * 3
-	    }, theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2), {
-	      width: 400,
-	      marginLeft: 'auto',
-	      marginRight: 'auto'
-	    }),
-	    paper: {
-	      marginTop: theme.spacing.unit * 8,
-	      display: 'flex',
-	      flexDirection: 'column',
-	      alignItems: 'center',
-	      padding: theme.spacing.unit * 2 + 'px ' + theme.spacing.unit * 3 + 'px ' + theme.spacing.unit * 3 + 'px'
-	    },
-	    avatar: {
-	      margin: theme.spacing.unit,
-	      backgroundColor: theme.palette.secondary.main
-	    },
-	    form: {
-	      width: '100%', // Fix IE 11 issue.
-	      marginTop: theme.spacing.unit
-	    },
-	    submit: {
-	      marginTop: theme.spacing.unit * 3
-	    }
-	  };
-	};
-
-	function SignInForm(props) {
-	  var classes = props.classes;
-
-
-	  return _react2.default.createElement(
-	    'main',
-	    { className: classes.main },
-	    _react2.default.createElement(_CssBaseline2.default, null),
-	    _react2.default.createElement(
-	      _Paper2.default,
-	      { className: classes.paper },
-	      _react2.default.createElement(
-	        _Avatar2.default,
-	        { className: classes.avatar },
-	        _react2.default.createElement(_LockOutlined2.default, null)
-	      ),
-	      _react2.default.createElement(
-	        _Typography2.default,
-	        { component: 'h1', variant: 'h5' },
-	        'Sign in'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        { className: classes.form },
-	        _react2.default.createElement(
-	          _FormControl2.default,
-	          { margin: 'normal', required: true, fullWidth: true },
-	          _react2.default.createElement(
-	            _InputLabel2.default,
-	            { htmlFor: 'email' },
-	            'Email Address'
-	          ),
-	          _react2.default.createElement(_Input2.default, { id: 'email', name: 'email', autoComplete: 'email', autoFocus: true })
-	        ),
-	        _react2.default.createElement(
-	          _FormControl2.default,
-	          { margin: 'normal', required: true, fullWidth: true },
-	          _react2.default.createElement(
-	            _InputLabel2.default,
-	            { htmlFor: 'password' },
-	            'Password'
-	          ),
-	          _react2.default.createElement(_Input2.default, { name: 'password', type: 'password', id: 'password', autoComplete: 'current-password' })
-	        ),
-	        _react2.default.createElement(_FormControlLabel2.default, {
-	          control: _react2.default.createElement(_Checkbox2.default, { value: 'remember', color: 'primary' }),
-	          label: 'Remember me'
-	        }),
-	        _react2.default.createElement(
-	          _Button2.default,
-	          {
-	            type: 'submit',
-	            fullWidth: true,
-	            variant: 'contained',
-	            color: 'primary',
-	            className: classes.submit
-	          },
-	          'Sign in'
-	        )
-	      )
-	    )
-	  );
-	}
-
-	SignInForm.propTypes = {
-	  classes: _propTypes2.default.object.isRequired
-	};
-
-	exports.default = (0, _withStyles2.default)(styles)(SignInForm);
-
-/***/ }),
-/* 336 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _Avatar.default;
-	  }
-	});
-
-	var _Avatar = _interopRequireDefault(__webpack_require__(337));
-
-/***/ }),
+/* 335 */,
+/* 336 */,
 /* 337 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55267,26 +55125,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 338 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _Button.default;
-	  }
-	});
-
-	var _Button = _interopRequireDefault(__webpack_require__(339));
-
-/***/ }),
+/* 338 */,
 /* 339 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55719,26 +55558,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 340 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _CssBaseline.default;
-	  }
-	});
-
-	var _CssBaseline = _interopRequireDefault(__webpack_require__(341));
-
-/***/ }),
+/* 340 */,
 /* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55849,26 +55669,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 342 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _FormControl.default;
-	  }
-	});
-
-	var _FormControl = _interopRequireDefault(__webpack_require__(343));
-
-/***/ }),
+/* 342 */,
 /* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56162,26 +55963,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 344 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _FormControlLabel.default;
-	  }
-	});
-
-	var _FormControlLabel = _interopRequireDefault(__webpack_require__(345));
-
-/***/ }),
+/* 344 */,
 /* 345 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -56392,26 +56174,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 346 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _Checkbox.default;
-	  }
-	});
-
-	var _Checkbox = _interopRequireDefault(__webpack_require__(347));
-
-/***/ }),
+/* 346 */,
 /* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -57050,26 +56813,7 @@
 	exports.default = _default;
 
 /***/ }),
-/* 352 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _Input.default;
-	  }
-	});
-
-	var _Input = _interopRequireDefault(__webpack_require__(353));
-
-/***/ }),
+/* 352 */,
 /* 353 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -57373,26 +57117,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 354 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _InputLabel.default;
-	  }
-	});
-
-	var _InputLabel = _interopRequireDefault(__webpack_require__(355));
-
-/***/ }),
+/* 354 */,
 /* 355 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -57865,7 +57590,7 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _Link = __webpack_require__(404);
+	var _Link = __webpack_require__(360);
 
 	var _Link2 = _interopRequireDefault(_Link);
 
@@ -57981,10 +57706,6 @@
 
 	    var _this = _possibleConstructorReturn(this, (SignUpPage.__proto__ || Object.getPrototypeOf(SignUpPage)).call(this, props, context));
 
-	    _this.state = {
-	      errors: {}
-	    };
-
 	    _this.onInputChange = _this.onInputChange.bind(_this);
 	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
 	    return _this;
@@ -57994,7 +57715,7 @@
 	    key: 'onInputChange',
 	    value: function onInputChange(event) {
 	      var field = event.target.name;
-	      var signUpRequest = this.props.signUpReducer.signUpRequest;
+	      var signUpRequest = this.props.authenticationReducer.signUpRequest;
 
 	      signUpRequest[field] = event.target.value;
 	      this.props.setSignUpRequest(signUpRequest);
@@ -58003,7 +57724,7 @@
 	    key: 'onFormSubmit',
 	    value: function onFormSubmit(event) {
 	      event.preventDefault();
-	      var signUpRequest = this.props.signUpReducer.signUpRequest;
+	      var signUpRequest = this.props.authenticationReducer.signUpRequest;
 	      // create a string for an HTTP body message
 
 	      var name = encodeURIComponent(signUpRequest.name);
@@ -58018,9 +57739,10 @@
 	    key: 'render',
 	    value: function render() {
 	      var classes = this.props.classes;
-	      var _props$signUpReducer = this.props.signUpReducer,
-	          signUpRequest = _props$signUpReducer.signUpRequest,
-	          errors = _props$signUpReducer.errors;
+	      var _props$authentication = this.props.authenticationReducer,
+	          signUpRequest = _props$authentication.signUpRequest,
+	          errors = _props$authentication.errors;
+
 
 	      return _react2.default.createElement(
 	        'main',
@@ -58055,7 +57777,8 @@
 	                { htmlFor: 'name' },
 	                'Name'
 	              ),
-	              _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, id: 'name', value: signUpRequest.name, name: 'name',
+	              errors.name ? _react2.default.createElement(_Input2.default, { error: true, onChange: this.onInputChange, id: 'name', value: signUpRequest.name, name: 'name',
+	                autoComplete: 'User name', autoFocus: true }) : _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, id: 'name', value: signUpRequest.name, name: 'name',
 	                autoComplete: 'User name', autoFocus: true })
 	            ),
 	            _react2.default.createElement(
@@ -58066,7 +57789,8 @@
 	                { htmlFor: 'email' },
 	                'Email Address'
 	              ),
-	              _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, id: 'email', value: signUpRequest.email, name: 'email',
+	              errors.email ? _react2.default.createElement(_Input2.default, { error: true, onChange: this.onInputChange, id: 'email', value: signUpRequest.email, name: 'email',
+	                autoComplete: 'email', autoFocus: true }) : _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, id: 'email', value: signUpRequest.email, name: 'email',
 	                autoComplete: 'email', autoFocus: true })
 	            ),
 	            _react2.default.createElement(
@@ -58077,7 +57801,9 @@
 	                { htmlFor: 'password' },
 	                'Password'
 	              ),
-	              _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, name: 'password', type: 'password', id: 'password',
+	              errors.password ? _react2.default.createElement(_Input2.default, { error: true, onChange: this.onInputChange, name: 'password', type: 'password', id: 'password',
+	                value: signUpRequest.password,
+	                autoComplete: 'current-password' }) : _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, name: 'password', type: 'password', id: 'password',
 	                value: signUpRequest.password,
 	                autoComplete: 'current-password' })
 	            ),
@@ -58094,7 +57820,7 @@
 	                color: 'primary',
 	                className: classes.submit
 	              },
-	              'Sign in'
+	              'Sign Up'
 	            )
 	          ),
 	          _react2.default.createElement('br', null),
@@ -58104,16 +57830,15 @@
 	            _react2.default.createElement(
 	              'p',
 	              null,
-	              'Already have an account ?',
-	              _react2.default.createElement('br', null),
+	              'Already have an account ?'
+	            ),
+	            _react2.default.createElement(
+	              'center',
+	              null,
 	              _react2.default.createElement(
-	                'center',
-	                null,
-	                _react2.default.createElement(
-	                  _Link2.default,
-	                  { href: '/signIn', className: classes.link },
-	                  'Sign In'
-	                )
+	                _Link2.default,
+	                { href: '/signIn', className: classes.link },
+	                'Sign In'
 	              )
 	            )
 	          )
@@ -58131,14 +57856,14 @@
 
 	SignUpPage.propTypes = {
 	  classes: _propTypes2.default.object.isRequired,
-	  signUpReducer: _propTypes2.default.object.isRequired,
+	  authenticationReducer: _propTypes2.default.object.isRequired,
 	  setSignUpRequest: _propTypes2.default.func.isRequired,
 	  signUp: _propTypes2.default.func.isRequired
 	};
 
 	function mapStateToProps(state) {
 	  return {
-	    signUpReducer: state.signUpReducer
+	    authenticationReducer: state.authenticationReducer
 	  };
 	}
 
@@ -58149,8 +57874,194 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _withStyles2.default)(styles)(SignUpPage));
 
 /***/ }),
-/* 360 */,
-/* 361 */,
+/* 360 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _interopRequireDefault = __webpack_require__(18);
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	Object.defineProperty(exports, "default", {
+	  enumerable: true,
+	  get: function get() {
+	    return _Link.default;
+	  }
+	});
+
+	var _Link = _interopRequireDefault(__webpack_require__(361));
+
+/***/ }),
+/* 361 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
+
+	var _interopRequireDefault = __webpack_require__(18);
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = exports.styles = void 0;
+
+	var _extends2 = _interopRequireDefault(__webpack_require__(31));
+
+	var _defineProperty2 = _interopRequireDefault(__webpack_require__(126));
+
+	var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(127));
+
+	var _react = _interopRequireDefault(__webpack_require__(1));
+
+	var _propTypes = _interopRequireDefault(__webpack_require__(22));
+
+	var _utils = __webpack_require__(138);
+
+	var _classnames = _interopRequireDefault(__webpack_require__(128));
+
+	var _helpers = __webpack_require__(216);
+
+	var _withStyles = _interopRequireDefault(__webpack_require__(129));
+
+	var _Typography = _interopRequireDefault(__webpack_require__(242));
+
+	// @inheritedComponent Typography
+	var styles = {
+	  /* Styles applied to the root element. */
+	  root: {},
+
+	  /* Styles applied to the root element if `underline="none"`. */
+	  underlineNone: {
+	    textDecoration: 'none'
+	  },
+
+	  /* Styles applied to the root element if `underline="hover"`. */
+	  underlineHover: {
+	    textDecoration: 'none',
+	    '&:hover': {
+	      textDecoration: 'underline'
+	    }
+	  },
+
+	  /* Styles applied to the root element if `underline="always"`. */
+	  underlineAlways: {
+	    textDecoration: 'underline'
+	  },
+	  // Same reset as ButtonBase.root
+
+	  /* Styles applied to the root element if `component="button"`. */
+	  button: {
+	    position: 'relative',
+	    // Remove grey highlight
+	    WebkitTapHighlightColor: 'transparent',
+	    backgroundColor: 'transparent',
+	    // Reset default value
+	    // We disable the focus ring for mouse, touch and keyboard users.
+	    outline: 'none',
+	    border: 0,
+	    margin: 0,
+	    // Remove the margin in Safari
+	    borderRadius: 0,
+	    padding: 0,
+	    // Remove the padding in Firefox
+	    cursor: 'pointer',
+	    userSelect: 'none',
+	    verticalAlign: 'middle',
+	    '-moz-appearance': 'none',
+	    // Reset
+	    '-webkit-appearance': 'none',
+	    // Reset
+	    '&::-moz-focus-inner': {
+	      borderStyle: 'none' // Remove Firefox dotted outline.
+
+	    }
+	  }
+	};
+	exports.styles = styles;
+
+	function Link(props) {
+	  var block = props.block,
+	      children = props.children,
+	      classes = props.classes,
+	      classNameProp = props.className,
+	      component = props.component,
+	      TypographyClasses = props.TypographyClasses,
+	      underline = props.underline,
+	      other = (0, _objectWithoutProperties2.default)(props, ["block", "children", "classes", "className", "component", "TypographyClasses", "underline"]);
+	  return _react.default.createElement(_Typography.default, (0, _extends2.default)({
+	    className: (0, _classnames.default)(classes.root, (0, _defineProperty2.default)({}, classes.button, component === 'button'), classes["underline".concat((0, _helpers.capitalize)(underline))], classNameProp),
+	    classes: TypographyClasses,
+	    component: component,
+	    inline: !block
+	  }, other), children);
+	}
+
+	process.env.NODE_ENV !== "production" ? Link.propTypes = {
+	  /**
+	   *  Controls whether the link is inline or not. When `block` is true the link is not inline
+	   *  when `block` is false it is.
+	   */
+	  block: _propTypes.default.bool,
+
+	  /**
+	   * The content of the link.
+	   */
+	  children: _propTypes.default.node.isRequired,
+
+	  /**
+	   * Override or extend the styles applied to the component.
+	   * See [CSS API](#css-api) below for more details.
+	   */
+	  classes: _propTypes.default.object.isRequired,
+
+	  /**
+	   * @ignore
+	   */
+	  className: _propTypes.default.string,
+
+	  /**
+	   * The color of the link.
+	   */
+	  color: _propTypes.default.oneOf(['error', 'inherit', 'primary', 'secondary', 'textPrimary', 'textSecondary']),
+
+	  /**
+	   * The component used for the root node.
+	   * Either a string to use a DOM element or a component.
+	   */
+	  component: _utils.componentPropType,
+
+	  /**
+	   * `classes` property applied to the [`Typography`](/api/typography/) element.
+	   */
+	  TypographyClasses: _propTypes.default.object,
+
+	  /**
+	   *  Controls when the link should have an underline.
+	   */
+	  underline: _propTypes.default.oneOf(['none', 'hover', 'always']),
+
+	  /**
+	   * Applies the theme typography styles.
+	   */
+	  variant: _propTypes.default.string
+	} : void 0;
+	Link.defaultProps = {
+	  block: false,
+	  color: 'primary',
+	  component: 'a',
+	  underline: 'hover',
+	  variant: 'inherit'
+	};
+
+	var _default = (0, _withStyles.default)(styles, {
+	  name: 'MuiLink'
+	})(Link);
+
+	exports.default = _default;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+
+/***/ }),
 /* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -58159,8 +58070,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.setSignUpRequest = undefined;
+	exports.setSignInRequest = exports.setSignUpRequest = undefined;
 	exports.signUp = signUp;
+	exports.signIn = signIn;
 
 	var _reduxActions = __webpack_require__(363);
 
@@ -58171,10 +58083,16 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var setSignUpRequest = exports.setSignUpRequest = (0, _reduxActions.createAction)('SET_SIGN_UP_REQUEST');
+	var setSignInRequest = exports.setSignInRequest = (0, _reduxActions.createAction)('SET_SIGN_IN_REQUEST');
 
 	function signUp(variables) {
 	  return function (dispatch) {
 	    dispatch({ type: 'SIGN_UP', payload: _source2.default.signUp(variables) });
+	  };
+	}
+	function signIn(variables) {
+	  return function (dispatch) {
+	    dispatch({ type: 'SIGN_IN', payload: _source2.default.signIn(variables) });
 	  };
 	}
 
@@ -59270,13 +59188,20 @@
 
 /***/ }),
 /* 398 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _Auth = __webpack_require__(406);
+
+	var _Auth2 = _interopRequireDefault(_Auth);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var authenticationSource = {
 
 	  signUp: function signUp(vairables) {
@@ -59287,19 +59212,47 @@
 	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	      xhr.responseType = 'json';
 	      xhr.addEventListener('load', function () {
+
 	        if (xhr.status === 200) {
-	          // set a message
-	          // localStorage.setItem('successMessage', xhr.response.message);
 	          resolve(xhr.response);
-	          // make a redirect
-	          // this.context.router.replace('/login');
 	        } else {
-	          // failure
 	          var errors = xhr.response.errors ? xhr.response.errors : {};
 	          errors.summary = xhr.response.message;
 	          reject(errors);
 	        }
 	      });
+
+	      xhr.send(vairables);
+	    });
+	  },
+
+	  signIn: function signIn(vairables) {
+	    return new Promise(function (resolve, reject) {
+	      // create an AJAX request
+	      var xhr = new XMLHttpRequest();
+	      xhr.open('post', '/auth/login');
+	      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	      xhr.responseType = 'json';
+	      xhr.addEventListener('load', function () {
+
+	        if (xhr.status === 200) {
+	          // save the token
+	          _Auth2.default.authenticateUser(xhr.response.token);
+
+	          // save the user
+	          _Auth2.default.loggedInUser(xhr.response.user.name);
+
+	          // save the userId
+	          _Auth2.default.loggedInUserId(xhr.response.user._id);
+
+	          resolve(xhr.response);
+	        } else {
+	          var errors = xhr.response.errors ? xhr.response.errors : {};
+	          errors.summary = xhr.response.message;
+	          reject(errors);
+	        }
+	      });
+
 	      xhr.send(vairables);
 	    });
 	  }
@@ -59707,189 +59660,400 @@
 /* 404 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	var _interopRequireDefault = __webpack_require__(18);
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	Object.defineProperty(exports, "default", {
-	  enumerable: true,
-	  get: function get() {
-	    return _Link.default;
-	  }
-	});
 
-	var _Link = _interopRequireDefault(__webpack_require__(405));
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-/***/ }),
-/* 405 */
-/***/ (function(module, exports, __webpack_require__) {
+	var _react = __webpack_require__(1);
 
-	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
+	var _react2 = _interopRequireDefault(_react);
 
-	var _interopRequireDefault = __webpack_require__(18);
+	var _propTypes = __webpack_require__(22);
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = exports.styles = void 0;
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _extends2 = _interopRequireDefault(__webpack_require__(31));
+	var _Link = __webpack_require__(360);
 
-	var _defineProperty2 = _interopRequireDefault(__webpack_require__(126));
+	var _Link2 = _interopRequireDefault(_Link);
 
-	var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(127));
+	var _CssBaseline = __webpack_require__(341);
 
-	var _react = _interopRequireDefault(__webpack_require__(1));
+	var _CssBaseline2 = _interopRequireDefault(_CssBaseline);
 
-	var _propTypes = _interopRequireDefault(__webpack_require__(22));
+	var _Paper = __webpack_require__(218);
 
-	var _utils = __webpack_require__(138);
+	var _Paper2 = _interopRequireDefault(_Paper);
 
-	var _classnames = _interopRequireDefault(__webpack_require__(128));
+	var _Avatar = __webpack_require__(337);
 
-	var _helpers = __webpack_require__(216);
+	var _Avatar2 = _interopRequireDefault(_Avatar);
 
-	var _withStyles = _interopRequireDefault(__webpack_require__(129));
+	var _LockOutlined = __webpack_require__(358);
 
-	var _Typography = _interopRequireDefault(__webpack_require__(242));
+	var _LockOutlined2 = _interopRequireDefault(_LockOutlined);
 
-	// @inheritedComponent Typography
-	var styles = {
-	  /* Styles applied to the root element. */
-	  root: {},
+	var _Typography = __webpack_require__(243);
 
-	  /* Styles applied to the root element if `underline="none"`. */
-	  underlineNone: {
-	    textDecoration: 'none'
-	  },
+	var _Typography2 = _interopRequireDefault(_Typography);
 
-	  /* Styles applied to the root element if `underline="hover"`. */
-	  underlineHover: {
-	    textDecoration: 'none',
-	    '&:hover': {
-	      textDecoration: 'underline'
+	var _FormControl = __webpack_require__(343);
+
+	var _FormControl2 = _interopRequireDefault(_FormControl);
+
+	var _InputLabel = __webpack_require__(355);
+
+	var _InputLabel2 = _interopRequireDefault(_InputLabel);
+
+	var _Input = __webpack_require__(353);
+
+	var _Input2 = _interopRequireDefault(_Input);
+
+	var _FormControlLabel = __webpack_require__(345);
+
+	var _FormControlLabel2 = _interopRequireDefault(_FormControlLabel);
+
+	var _Checkbox = __webpack_require__(347);
+
+	var _Checkbox2 = _interopRequireDefault(_Checkbox);
+
+	var _Button = __webpack_require__(339);
+
+	var _Button2 = _interopRequireDefault(_Button);
+
+	var _withStyles = __webpack_require__(129);
+
+	var _withStyles2 = _interopRequireDefault(_withStyles);
+
+	var _actions = __webpack_require__(362);
+
+	var authenticationActions = _interopRequireWildcard(_actions);
+
+	var _redux = __webpack_require__(38);
+
+	var _reactRedux = __webpack_require__(17);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var styles = function styles(theme) {
+	  return {
+	    main: _defineProperty({
+	      width: 'auto',
+	      display: 'block', // Fix IE 11 issue.
+	      marginLeft: theme.spacing.unit * 3,
+	      marginRight: theme.spacing.unit * 3
+	    }, theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2), {
+	      width: 400,
+	      marginLeft: 'auto',
+	      marginRight: 'auto'
+	    }),
+	    paper: {
+	      marginTop: theme.spacing.unit * 8,
+	      display: 'flex',
+	      flexDirection: 'column',
+	      alignItems: 'center',
+	      padding: theme.spacing.unit * 2 + 'px ' + theme.spacing.unit * 3 + 'px ' + theme.spacing.unit * 3 + 'px'
+	    },
+	    avatar: {
+	      margin: theme.spacing.unit,
+	      backgroundColor: theme.palette.secondary.main
+	    },
+	    form: {
+	      width: '100%', // Fix IE 11 issue.
+	      marginTop: theme.spacing.unit
+	    },
+	    submit: {
+	      marginTop: theme.spacing.unit * 3
+	    },
+	    link: {
+	      margin: theme.spacing.unit
 	    }
-	  },
-
-	  /* Styles applied to the root element if `underline="always"`. */
-	  underlineAlways: {
-	    textDecoration: 'underline'
-	  },
-	  // Same reset as ButtonBase.root
-
-	  /* Styles applied to the root element if `component="button"`. */
-	  button: {
-	    position: 'relative',
-	    // Remove grey highlight
-	    WebkitTapHighlightColor: 'transparent',
-	    backgroundColor: 'transparent',
-	    // Reset default value
-	    // We disable the focus ring for mouse, touch and keyboard users.
-	    outline: 'none',
-	    border: 0,
-	    margin: 0,
-	    // Remove the margin in Safari
-	    borderRadius: 0,
-	    padding: 0,
-	    // Remove the padding in Firefox
-	    cursor: 'pointer',
-	    userSelect: 'none',
-	    verticalAlign: 'middle',
-	    '-moz-appearance': 'none',
-	    // Reset
-	    '-webkit-appearance': 'none',
-	    // Reset
-	    '&::-moz-focus-inner': {
-	      borderStyle: 'none' // Remove Firefox dotted outline.
-
-	    }
-	  }
+	  };
 	};
-	exports.styles = styles;
 
-	function Link(props) {
-	  var block = props.block,
-	      children = props.children,
-	      classes = props.classes,
-	      classNameProp = props.className,
-	      component = props.component,
-	      TypographyClasses = props.TypographyClasses,
-	      underline = props.underline,
-	      other = (0, _objectWithoutProperties2.default)(props, ["block", "children", "classes", "className", "component", "TypographyClasses", "underline"]);
-	  return _react.default.createElement(_Typography.default, (0, _extends2.default)({
-	    className: (0, _classnames.default)(classes.root, (0, _defineProperty2.default)({}, classes.button, component === 'button'), classes["underline".concat((0, _helpers.capitalize)(underline))], classNameProp),
-	    classes: TypographyClasses,
-	    component: component,
-	    inline: !block
-	  }, other), children);
+	var SignInPage = function (_React$Component) {
+	  _inherits(SignInPage, _React$Component);
+
+	  function SignInPage(props, context) {
+	    _classCallCheck(this, SignInPage);
+
+	    var _this = _possibleConstructorReturn(this, (SignInPage.__proto__ || Object.getPrototypeOf(SignInPage)).call(this, props, context));
+
+	    _this.onInputChange = _this.onInputChange.bind(_this);
+	    _this.onFormSubmit = _this.onFormSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(SignInPage, [{
+	    key: 'onInputChange',
+	    value: function onInputChange(event) {
+	      var field = event.target.name;
+	      var signInRequest = this.props.authenticationReducer.signInRequest;
+
+	      signInRequest[field] = event.target.value;
+	      this.props.setSignInRequest(signInRequest);
+	    }
+	  }, {
+	    key: 'onFormSubmit',
+	    value: function onFormSubmit(event) {
+	      event.preventDefault();
+	      var signInRequest = this.props.authenticationReducer.signInRequest;
+	      // create a string for an HTTP body message
+
+	      var email = encodeURIComponent(signInRequest.email);
+	      var password = encodeURIComponent(signInRequest.password);
+
+	      var formData = 'email=' + email + '&password=' + password;
+
+	      this.props.signIn(formData);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var classes = this.props.classes;
+	      var _props$authentication = this.props.authenticationReducer,
+	          signInRequest = _props$authentication.signInRequest,
+	          errors = _props$authentication.errors;
+
+
+	      return _react2.default.createElement(
+	        'main',
+	        { className: classes.main },
+	        _react2.default.createElement(_CssBaseline2.default, null),
+	        _react2.default.createElement(
+	          _Paper2.default,
+	          { className: classes.paper },
+	          _react2.default.createElement(
+	            _Avatar2.default,
+	            { className: classes.avatar },
+	            _react2.default.createElement(_LockOutlined2.default, null)
+	          ),
+	          _react2.default.createElement(
+	            _Typography2.default,
+	            { component: 'h1', variant: 'h5' },
+	            'Sign In'
+	          ),
+	          errors.summary && _react2.default.createElement(
+	            'p',
+	            { className: 'error-message' },
+	            errors.summary
+	          ),
+	          _react2.default.createElement(
+	            'form',
+	            { className: classes.form, onSubmit: this.onFormSubmit },
+	            _react2.default.createElement(
+	              _FormControl2.default,
+	              { margin: 'normal', required: true, fullWidth: true },
+	              _react2.default.createElement(
+	                _InputLabel2.default,
+	                { htmlFor: 'email' },
+	                'Email Address'
+	              ),
+	              errors.email ? _react2.default.createElement(_Input2.default, { error: true, onChange: this.onInputChange, id: 'email', value: signInRequest.email, name: 'email',
+	                autoComplete: 'email', autoFocus: true }) : _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, id: 'email', value: signInRequest.email, name: 'email',
+	                autoComplete: 'email', autoFocus: true })
+	            ),
+	            _react2.default.createElement(
+	              _FormControl2.default,
+	              { margin: 'normal', required: true, fullWidth: true },
+	              _react2.default.createElement(
+	                _InputLabel2.default,
+	                { htmlFor: 'password' },
+	                'Password'
+	              ),
+	              errors.password ? _react2.default.createElement(_Input2.default, { error: true, onChange: this.onInputChange, name: 'password', type: 'password', id: 'password',
+	                value: signInRequest.password,
+	                autoComplete: 'current-password' }) : _react2.default.createElement(_Input2.default, { onChange: this.onInputChange, name: 'password', type: 'password', id: 'password',
+	                value: signInRequest.password,
+	                autoComplete: 'current-password' })
+	            ),
+	            _react2.default.createElement(_FormControlLabel2.default, {
+	              control: _react2.default.createElement(_Checkbox2.default, { value: 'remember', color: 'primary' }),
+	              label: 'Remember me'
+	            }),
+	            _react2.default.createElement(
+	              _Button2.default,
+	              {
+	                type: 'submit',
+	                fullWidth: true,
+	                variant: 'contained',
+	                color: 'primary',
+	                className: classes.submit
+	              },
+	              'Sign in'
+	            )
+	          ),
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            _Typography2.default,
+	            null,
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Not have an account ?'
+	            ),
+	            _react2.default.createElement(
+	              'center',
+	              null,
+	              _react2.default.createElement(
+	                _Link2.default,
+	                { href: '/signUp', className: classes.link },
+	                'Sign Up'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SignInPage;
+	}(_react2.default.Component);
+
+	SignInPage.contextTypes = {
+	  router: _propTypes2.default.object.isRequired
+	};
+
+	SignInPage.propTypes = {
+	  classes: _propTypes2.default.object.isRequired,
+	  authenticationReducer: _propTypes2.default.object.isRequired,
+	  setSignInRequest: _propTypes2.default.func.isRequired,
+	  signIn: _propTypes2.default.func.isRequired
+	};
+
+	function mapStateToProps(state) {
+	  return {
+	    authenticationReducer: state.authenticationReducer
+	  };
 	}
 
-	process.env.NODE_ENV !== "production" ? Link.propTypes = {
-	  /**
-	   *  Controls whether the link is inline or not. When `block` is true the link is not inline
-	   *  when `block` is false it is.
-	   */
-	  block: _propTypes.default.bool,
+	function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)(authenticationActions, dispatch);
+	}
 
-	  /**
-	   * The content of the link.
-	   */
-	  children: _propTypes.default.node.isRequired,
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _withStyles2.default)(styles)(SignInPage));
 
-	  /**
-	   * Override or extend the styles applied to the component.
-	   * See [CSS API](#css-api) below for more details.
-	   */
-	  classes: _propTypes.default.object.isRequired,
+/***/ }),
+/* 405 */,
+/* 406 */
+/***/ (function(module, exports) {
 
-	  /**
-	   * @ignore
-	   */
-	  className: _propTypes.default.string,
+	'use strict';
 
-	  /**
-	   * The color of the link.
-	   */
-	  color: _propTypes.default.oneOf(['error', 'inherit', 'primary', 'secondary', 'textPrimary', 'textSecondary']),
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 
-	  /**
-	   * The component used for the root node.
-	   * Either a string to use a DOM element or a component.
-	   */
-	  component: _utils.componentPropType,
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	  /**
-	   * `classes` property applied to the [`Typography`](/api/typography/) element.
-	   */
-	  TypographyClasses: _propTypes.default.object,
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	  /**
-	   *  Controls when the link should have an underline.
-	   */
-	  underline: _propTypes.default.oneOf(['none', 'hover', 'always']),
+	var Auth = function () {
+	    function Auth() {
+	        _classCallCheck(this, Auth);
+	    }
 
-	  /**
-	   * Applies the theme typography styles.
-	   */
-	  variant: _propTypes.default.string
-	} : void 0;
-	Link.defaultProps = {
-	  block: false,
-	  color: 'primary',
-	  component: 'a',
-	  underline: 'hover',
-	  variant: 'inherit'
-	};
+	    _createClass(Auth, null, [{
+	        key: 'authenticateUser',
 
-	var _default = (0, _withStyles.default)(styles, {
-	  name: 'MuiLink'
-	})(Link);
 
-	exports.default = _default;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+	        /**
+	         * Authenticate a user. Save a token string in Local Storage
+	         *
+	         * @param {string} token
+	         */
+	        value: function authenticateUser(token) {
+	            localStorage.setItem('token', token);
+	        }
+	    }, {
+	        key: 'loggedInUser',
+	        value: function loggedInUser(user) {
+	            localStorage.setItem('user', user);
+	        }
+	    }, {
+	        key: 'loggedInUserId',
+	        value: function loggedInUserId(userId) {
+	            localStorage.setItem('userId', userId);
+	        }
+	    }, {
+	        key: 'selectedWorkerId',
+	        value: function selectedWorkerId(workerId) {
+	            localStorage.setItem('workerId', workerId);
+	        }
+	    }, {
+	        key: 'getUser',
+	        value: function getUser() {
+	            return localStorage.getItem('user');
+	        }
+	    }, {
+	        key: 'getUserId',
+	        value: function getUserId() {
+	            return localStorage.getItem('userId');
+	        }
+	    }, {
+	        key: 'getWorkerId',
+	        value: function getWorkerId() {
+	            return localStorage.getItem('workerId');
+	        }
+
+	        /**
+	         * Check if a user is authenticated - check if a token is saved in Local Storage
+	         *
+	         * @returns {boolean}
+	         */
+
+	    }, {
+	        key: 'isUserAuthenticated',
+	        value: function isUserAuthenticated() {
+	            return localStorage.getItem('token') !== null;
+	        }
+
+	        /**
+	         * Deauthenticate a user. Remove a token from Local Storage.
+	         *
+	         */
+
+	    }, {
+	        key: 'deauthenticateUser',
+	        value: function deauthenticateUser() {
+	            localStorage.removeItem('token');
+	        }
+	    }, {
+	        key: 'removeUser',
+	        value: function removeUser() {
+	            localStorage.removeItem('user');
+	        }
+
+	        /**
+	         * Get a token value.
+	         *
+	         * @returns {string}
+	         */
+
+	    }, {
+	        key: 'getToken',
+	        value: function getToken() {
+	            return localStorage.getItem('token');
+	        }
+	    }]);
+
+	    return Auth;
+	}();
+
+	exports.default = Auth;
 
 /***/ })
 /******/ ]);
