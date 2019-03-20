@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import Link from '@material-ui/core/Link';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
@@ -13,8 +14,8 @@ import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import * as SignUpActions from "../actions";
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux';
 
 const styles = theme => ({
   main: {
@@ -46,6 +47,9 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
+  link: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class SignUpPage extends React.Component {
@@ -55,73 +59,37 @@ class SignUpPage extends React.Component {
 
     this.state = {
       errors: {},
-      user: {
-        name: '',
-        email: '',
-        password: ''
-      },
     };
+
     this.onInputChange = this.onInputChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
   onInputChange(event) {
-    this.props.setSignUpRequest();
     const field = event.target.name;
-    const user = this.state.user;
-    user[field] = event.target.value;
-
-    this.setState({
-      user
-    });
+    const {signUpRequest} = this.props.signUpReducer;
+    signUpRequest[field] = event.target.value;
+    this.props.setSignUpRequest(signUpRequest);
   }
 
   onFormSubmit(event) {
     event.preventDefault();
+    const {signUpRequest} = this.props.signUpReducer;
     // create a string for an HTTP body message
-    const name = encodeURIComponent(this.state.user.name);
-    const email = encodeURIComponent(this.state.user.email);
-    const password = encodeURIComponent(this.state.user.password);
+    const name = encodeURIComponent(signUpRequest.name);
+    const email = encodeURIComponent(signUpRequest.email);
+    const password = encodeURIComponent(signUpRequest.password);
 
     const formData = `name=${name}&email=${email}&password=${password}`;
 
-    // create an AJAX request
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', '/auth/signup');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
-        // success
-        // change the component-container state
-        this.setState({
-          errors: {}
-        });
-
-        // set a message
-        localStorage.setItem('successMessage', xhr.response.message);
-
-        // make a redirect
-        this.context.router.replace('/login');
-      } else {
-        // failure
-        const errors = xhr.response.errors ? xhr.response.errors : {};
-        errors.summary = xhr.response.message;
-
-        this.setState({
-          errors
-        });
-      }
-    });
-    xhr.send(formData);
+    this.props.signUp(formData);
   }
 
 
   render() {
 
-    const errors = this.state.errors;
     const {classes} = this.props;
-
+    const {signUpRequest, errors} = this.props.signUpReducer;
     return (
       <main className={classes.main}>
         <CssBaseline/>
@@ -131,23 +99,23 @@ class SignUpPage extends React.Component {
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign Up
-            {errors.summary && <p className="error-message">{errors.summary}</p>}
           </Typography>
+          {errors.summary && <p className="error-message">{errors.summary}</p>}
           <form className={classes.form} onSubmit={this.onFormSubmit}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="name">Name</InputLabel>
-              <Input onChange={this.onInputChange} id="name" value={this.state.user.name} name="name"
-                     autoComplete="User ame" autoFocus/>
+              <Input onChange={this.onInputChange} id="name" value={signUpRequest.name} name="name"
+                     autoComplete="User name" autoFocus/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input onChange={this.onInputChange} id="email" value={this.state.user.email} name="email"
+              <Input onChange={this.onInputChange} id="email" value={signUpRequest.email} name="email"
                      autoComplete="email" autoFocus/>
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>
               <Input onChange={this.onInputChange} name="password" type="password" id="password"
-                     value={this.state.user.password}
+                     value={signUpRequest.password}
                      autoComplete="current-password"/>
             </FormControl>
             <FormControlLabel
@@ -164,9 +132,22 @@ class SignUpPage extends React.Component {
               Sign in
             </Button>
           </form>
+          <br/>
+          <Typography>
+            <p>Already have an account ?
+              <br/>
+              <center>
+                <Link href="/signIn" className={classes.link}>
+                  Sign In
+                </Link>
+              </center>
+            </p>
+          </Typography>
+
         </Paper>
       </main>
-    );
+    )
+      ;
   }
 
 }
@@ -177,12 +158,14 @@ SignUpPage.contextTypes = {
 
 SignUpPage.propTypes = {
   classes: PropTypes.object.isRequired,
+  signUpReducer: PropTypes.object.isRequired,
   setSignUpRequest: PropTypes.func.isRequired,
+  signUp: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter,
+    signUpReducer: state.signUpReducer,
   }
 }
 

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import counter from './counter'
-import signUp from '../authentication/reducer'
+import signUpReducer from '../authentication/reducer'
 
 const rootReducer = combineReducers({
   counter,
-  signUp
+  signUpReducer
 });
 
 export default rootReducer
