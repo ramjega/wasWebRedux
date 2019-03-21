@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import Link from '@material-ui/core/Link';
+import {Link} from 'react-router';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
@@ -50,7 +50,13 @@ const styles = theme => ({
   },
   link: {
     margin: theme.spacing.unit,
+    color: '#3f51b5',
+    fontSize: '10px',
   },
+  text: {
+    fontSize: '12px',
+
+  }
 });
 
 class SignUpPage extends React.Component {
@@ -99,7 +105,7 @@ class SignUpPage extends React.Component {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon/>
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h4">
             Sign Up
           </Typography>
 
@@ -155,15 +161,12 @@ class SignUpPage extends React.Component {
           </form>
 
           <br/>
-          <Typography>
-            <p>Already have an account ?</p>
-
-            <center>
-              <Link href="/signIn" className={classes.link}>
-              Sign In
-            </Link>
-            </center>
+          <Typography className={classes.text}>
+            Already have an account ?
           </Typography>
+          <Link to="/signIn" className={classes.link}>
+            Sign In
+          </Link>
 
         </Paper>
       </main>
