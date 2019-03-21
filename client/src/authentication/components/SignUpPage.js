@@ -16,6 +16,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import * as SignUpActions from "../actions";
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
+import moment from "moment";
 
 const styles = theme => ({
   main: {
@@ -75,8 +76,9 @@ class SignUpPage extends React.Component {
     const name = encodeURIComponent(signUpRequest.name);
     const email = encodeURIComponent(signUpRequest.email);
     const password = encodeURIComponent(signUpRequest.password);
+    const createdTime = encodeURIComponent(moment().unix());
 
-    const formData = `name=${name}&email=${email}&password=${password}`;
+    const formData = `name=${name}&email=${email}&password=${password}&createdTime=${createdTime}`;
 
     this.props.signUp(formData);
     this.props.clearRequest();

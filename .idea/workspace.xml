@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="079995e6-a16f-4499-b66d-de7f4b0e83a5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/passport/local-signup.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/passport/local-signup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/dist/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/dist/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +38,8 @@
           <entry key="eslintignore" value="1" />
           <entry key="gitignore" value="1" />
           <entry key="html" value="6" />
-          <entry key="js" value="177" />
-          <entry key="json" value="11" />
+          <entry key="js" value="178" />
+          <entry key="json" value="12" />
           <entry key="jsx" value="1" />
           <entry key="md" value="1" />
           <entry key="svg" value="1" />
@@ -51,9 +51,9 @@
         <counts>
           <entry key="CSS" value="2" />
           <entry key="HTML" value="6" />
-          <entry key="JSON" value="12" />
+          <entry key="JSON" value="13" />
           <entry key="JSX Harmony" value="1" />
-          <entry key="JavaScript" value="177" />
+          <entry key="JavaScript" value="178" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="SVG" value="1" />
@@ -65,7 +65,7 @@
         <counts>
           <entry key="babelrc" value="6" />
           <entry key="html" value="18" />
-          <entry key="js" value="4926" />
+          <entry key="js" value="5013" />
           <entry key="json" value="30" />
         </counts>
       </usages-collector>
@@ -73,7 +73,7 @@
         <counts>
           <entry key="HTML" value="18" />
           <entry key="JSON" value="36" />
-          <entry key="JavaScript" value="4926" />
+          <entry key="JavaScript" value="5013" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -86,16 +86,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1760">
+              <caret line="80" column="60" lean-forward="true" selection-start-line="80" selection-start-column="60" selection-end-line="80" selection-end-column="60" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/passport/local-login.js">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/passport/local-signup.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
               <caret line="17" column="19" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="282">
+              <caret line="17" column="8" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -129,6 +150,7 @@
       <find>CardText</find>
       <find>&lt;p&gt;</find>
       <find>name</find>
+      <find>mom</find>
     </findStrings>
     <replaceStrings>
       <replace>classes</replace>
@@ -187,10 +209,10 @@
         <option value="$PROJECT_DIR$/client/src/base/components/Header.js" />
         <option value="$PROJECT_DIR$/client/src/authentication/actions.js" />
         <option value="$PROJECT_DIR$/client/src/authentication/reducer.js" />
-        <option value="$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js" />
         <option value="$PROJECT_DIR$/client/src/authentication/components/SignInPage.js" />
         <option value="$PROJECT_DIR$/server/models/user.js" />
         <option value="$PROJECT_DIR$/server/passport/local-signup.js" />
+        <option value="$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js" />
       </list>
     </option>
   </component>
@@ -231,19 +253,28 @@
             <path>
               <item name="wasWebRedux" type="b2602c69:ProjectViewProjectNode" />
               <item name="wasWebRedux" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wasWebRedux" type="b2602c69:ProjectViewProjectNode" />
               <item name="wasWebRedux" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wasWebRedux" type="b2602c69:ProjectViewProjectNode" />
               <item name="wasWebRedux" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="passport" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="authentication" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wasWebRedux" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wasWebRedux" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="authentication" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -256,7 +287,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553188899373" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553189324467" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../was" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -313,12 +344,12 @@
       <workItem from="1552968926191" duration="1801000" />
       <workItem from="1553010260122" duration="6192000" />
       <workItem from="1553062823240" duration="22275000" />
-      <workItem from="1553177679389" duration="7959000" />
+      <workItem from="1553177679389" duration="8464000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72966000" />
+    <option name="totallyTimeSpent" value="73471000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1920" height="1084" extended-state="6" />
@@ -461,13 +492,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="40" column="57" selection-start-line="40" selection-start-column="57" selection-end-line="40" selection-end-column="57" />
         </state>
       </provider>
     </entry>
@@ -640,16 +664,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="82" column="39" lean-forward="true" selection-start-line="81" selection-start-column="4" selection-end-line="82" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/authentication/actions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -667,9 +681,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/passport/local-login.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/models/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -681,6 +692,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="17" column="19" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/passport/local-login.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/authentication/components/SignUpPage.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1760">
+          <caret line="80" column="60" lean-forward="true" selection-start-line="80" selection-start-column="60" selection-end-line="80" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
