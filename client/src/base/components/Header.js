@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Link } from 'react-router';
+import {Link} from 'react-router';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,18 +9,31 @@ import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
+import {fade} from '@material-ui/core/styles/colorManipulator';
+import {withStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Avatar from '@material-ui/core/Avatar';
+import deepOrange from '@material-ui/core/colors/deepOrange';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Auth from '../../modules/Auth';
 
 const styles = theme => ({
   root: {
     width: '100%',
+  },
+  avatar: {
+    margin: 10,
+  },
+  orangeAvatar: {
+    margin: 10,
+    height:25,
+    width:25,
+    color: '#fff',
+    backgroundColor: deepOrange[500],
   },
   grow: {
     flexGrow: 1,
@@ -99,54 +112,65 @@ class Header extends React.Component {
   }
 
 
-  handleProfileMenuOpen(event){
-    this.setState({ anchorEl: event.currentTarget });
+  handleProfileMenuOpen(event) {
+    this.setState({anchorEl: event.currentTarget});
   };
 
-  handleMenuClose(){
-    this.setState({ anchorEl: null });
+  handleMenuClose() {
+    this.setState({anchorEl: null});
     this.handleMobileMenuClose();
   };
 
-  handleMobileMenuOpen(event){
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  handleMobileMenuOpen(event) {
+    this.setState({mobileMoreAnchorEl: event.currentTarget});
   };
 
-  handleMobileMenuClose(){
-    this.setState({ mobileMoreAnchorEl: null });
+  handleMobileMenuClose() {
+    this.setState({mobileMoreAnchorEl: null});
   };
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const {anchorEl, mobileMoreAnchorEl} = this.state;
+    const {classes} = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+    let user;
+    if(Auth.isUserAuthenticated()) {
+      user = Auth.getUser();
+    }
     const renderMenu = (
       <Menu
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+        transformOrigin={{vertical: 'top', horizontal: 'right'}}
         open={isMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={this.handleMenuClose.bind(this)}
       >
-        <Link to="/signIn"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign In</MenuItem></Link>
-        <Link to="/signUp"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Up</MenuItem></Link>
+        {Auth.isUserAuthenticated() ?
+          <div>
+            <Link><MenuItem onClick={this.handleMenuClose.bind(this)}>{user.name}</MenuItem></Link>
+            < Link to="/logout"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Out</MenuItem></Link>
+          </div> :
+        <div>
+          <Link to="/signIn"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign In</MenuItem></Link>
+          < Link to="/signUp"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Up</MenuItem></Link>
+        </div>
+        }
       </Menu>
     );
 
     const renderMobileMenu = (
       <Menu
         anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+        transformOrigin={{vertical: 'top', horizontal: 'right'}}
         open={isMobileMenuOpen}
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.handleMobileMenuClose.bind(this)}>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
-              <MailIcon />
+              <MailIcon/>
             </Badge>
           </IconButton>
           <p>Messages</p>
@@ -154,14 +178,14 @@ class Header extends React.Component {
         <MenuItem onClick={this.handleMobileMenuClose.bind(this)}>
           <IconButton color="inherit">
             <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
+              <NotificationsIcon/>
             </Badge>
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
         <MenuItem onClick={this.handleProfileMenuOpen.bind(this)}>
           <IconButton color="inherit">
-            <AccountCircle />
+            <AccountCircle/>
           </IconButton>
           <p>Profile</p>
         </MenuItem>
@@ -173,16 +197,16 @@ class Header extends React.Component {
         <AppBar position="static">
           <Toolbar>
             <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
+              <MenuIcon/>
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              <Link to="/" className={classes.title} style={{ color: '#FFF' }}>
+              <Link to="/" className={classes.title} style={{color: '#FFF'}}>
                 WAS
               </Link>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
-                <SearchIcon />
+                <SearchIcon/>
               </div>
               <InputBase
                 placeholder="Search…"
@@ -192,16 +216,16 @@ class Header extends React.Component {
                 }}
               />
             </div>
-            <div className={classes.grow} />
+            <div className={classes.grow}/>
             <div className={classes.sectionDesktop}>
               <IconButton color="inherit">
                 <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
+                  <MailIcon/>
                 </Badge>
               </IconButton>
               <IconButton color="inherit">
                 <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
+                  <NotificationsIcon/>
                 </Badge>
               </IconButton>
               <IconButton
@@ -210,12 +234,15 @@ class Header extends React.Component {
                 onClick={this.handleProfileMenuOpen.bind(this)}
                 color="inherit"
               >
-                <AccountCircle />
+                {Auth.isUserAuthenticated() ?
+                  <Avatar sizes={"10px"} className={classes.orangeAvatar}>{user.name[0].toUpperCase()}</Avatar> :
+                  <AccountCircle/>
+                }
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
               <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen.bind(this)} color="inherit">
-                <MoreIcon />
+                <MoreIcon/>
               </IconButton>
             </div>
           </Toolbar>

@@ -9,12 +9,8 @@ class Auth {
         localStorage.setItem('token', token);
     }
 
-    static loggedInUser(user) {
+    static saveUser(user) {
         localStorage.setItem('user', user);
-    }
-
-    static loggedInUserId(userId) {
-        localStorage.setItem('userId', userId);
     }
 
     static selectedWorkerId(workerId) {
@@ -22,7 +18,7 @@ class Auth {
     }
 
     static getUser() {
-        return localStorage.getItem('user');
+        return JSON.parse(localStorage.getItem('user'));
     }
 
     static getUserId() {
@@ -50,8 +46,10 @@ class Auth {
         localStorage.removeItem('token');
     }
 
-    static removeUser() {
+    static removeStorage() {
         localStorage.removeItem('user');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('workerId');
     }
 
     /**

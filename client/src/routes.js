@@ -2,6 +2,7 @@ import Header from "./base/components/Header";
 import SignInPage from "./authentication/components/SignInPage";
 import SignUpPage from "./authentication/components/SignUpPage";
 import Home from "./base/components/Home";
+import Auth from "./modules/Auth";
 
 
 const routes = {
@@ -22,6 +23,18 @@ const routes = {
       path: '/signUp',
       component: SignUpPage
     },
+
+    {
+      path: '/logout',
+      onEnter: (nextState, replace) => {
+        Auth.deauthenticateUser();
+        Auth.removeStorage();
+
+        // change the current URL to /
+        replace('/');
+      }
+    }
+
 
 
   ]

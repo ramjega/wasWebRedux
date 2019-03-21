@@ -43,10 +43,7 @@ let authenticationSource = {
           Auth.authenticateUser(xhr.response.token);
 
           // save the user
-          Auth.loggedInUser(xhr.response.user.name);
-
-          // save the userId
-          Auth.loggedInUserId(xhr.response.user._id);
+          Auth.saveUser(JSON.stringify(xhr.response.user));
 
           resolve(xhr.response);
 

@@ -1,3 +1,5 @@
+import {Router, browserHistory} from 'react-router'
+
 export default function reducer(state = {
 
   signUpRequest: {
@@ -29,6 +31,7 @@ export default function reducer(state = {
       return {...state, mutateState: 1}
     }
     case 'SIGN_UP_FULFILLED': {
+      browserHistory.push("/signIn");
       return {...state, mutateState: 2, success: action.payload}
     }
     case 'SIGN_UP_REJECTED': {
@@ -40,6 +43,7 @@ export default function reducer(state = {
       return {...state, mutateState: 1}
     }
     case 'SIGN_IN_FULFILLED': {
+      browserHistory.push("/");
       return {...state, mutateState: 2, success: action.payload}
     }
     case 'SIGN_IN_REJECTED': {

@@ -61,6 +61,7 @@ class SignInPage extends React.Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
+
   onInputChange(event) {
     const field = event.target.name;
     const {signInRequest} = this.props.authenticationReducer;
