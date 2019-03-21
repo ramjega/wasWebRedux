@@ -3,6 +3,8 @@ import authenticationSource from './source'
 
 export const setSignUpRequest = createAction('SET_SIGN_UP_REQUEST');
 export const setSignInRequest = createAction('SET_SIGN_IN_REQUEST');
+export const clearRequest = createAction('CLEAR_REQUEST');
+export const clearSuccessAndErrors = createAction('CLEAR_SUCCESS_AND_ERRORS');
 
 export function signUp(variables) {
   return function (dispatch) {

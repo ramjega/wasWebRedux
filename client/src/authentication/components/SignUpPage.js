@@ -79,6 +79,8 @@ class SignUpPage extends React.Component {
     const formData = `name=${name}&email=${email}&password=${password}`;
 
     this.props.signUp(formData);
+    this.props.clearRequest();
+    this.props.clearSuccessAndErrors();
   }
 
 
@@ -178,6 +180,8 @@ SignUpPage.propTypes = {
   authenticationReducer: PropTypes.object.isRequired,
   setSignUpRequest: PropTypes.func.isRequired,
   signUp: PropTypes.func.isRequired,
+  clearRequest: PropTypes.func.isRequired,
+  clearSuccessAndErrors: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

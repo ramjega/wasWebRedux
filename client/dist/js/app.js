@@ -28365,6 +28365,12 @@
 	    case 'SET_SIGN_IN_REQUEST':
 	      return _extends({}, state, { signInRequest: action.payload });
 
+	    case 'CLEAR_REQUEST':
+	      return _extends({}, state, { signInRequest: { email: '', password: '' }, signUpRequest: { name: '', email: '', password: '' } });
+
+	    case 'CLEAR_SUCCESS_AND_ERRORS':
+	      return _extends({}, state, { success: {}, errors: { summary: '' } });
+
 	    case 'SIGN_UP_PENDING':
 	      {
 	        return _extends({}, state, { mutateState: 1 });
@@ -55183,6 +55189,8 @@
 	      var formData = 'email=' + email + '&password=' + password;
 
 	      this.props.signIn(formData);
+	      this.props.clearRequest();
+	      this.props.clearSuccessAndErrors();
 	    }
 	  }, {
 	    key: 'render',
@@ -55295,7 +55303,9 @@
 	  classes: _propTypes2.default.object.isRequired,
 	  authenticationReducer: _propTypes2.default.object.isRequired,
 	  setSignInRequest: _propTypes2.default.func.isRequired,
-	  signIn: _propTypes2.default.func.isRequired
+	  signIn: _propTypes2.default.func.isRequired,
+	  clearRequest: _propTypes2.default.func.isRequired,
+	  clearSuccessAndErrors: _propTypes2.default.func.isRequired
 	};
 
 	function mapStateToProps(state) {
@@ -58120,7 +58130,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.setSignInRequest = exports.setSignUpRequest = undefined;
+	exports.clearSuccessAndErrors = exports.clearRequest = exports.setSignInRequest = exports.setSignUpRequest = undefined;
 	exports.signUp = signUp;
 	exports.signIn = signIn;
 
@@ -58134,6 +58144,8 @@
 
 	var setSignUpRequest = exports.setSignUpRequest = (0, _reduxActions.createAction)('SET_SIGN_UP_REQUEST');
 	var setSignInRequest = exports.setSignInRequest = (0, _reduxActions.createAction)('SET_SIGN_IN_REQUEST');
+	var clearRequest = exports.clearRequest = (0, _reduxActions.createAction)('CLEAR_REQUEST');
+	var clearSuccessAndErrors = exports.clearSuccessAndErrors = (0, _reduxActions.createAction)('CLEAR_SUCCESS_AND_ERRORS');
 
 	function signUp(variables) {
 	  return function (dispatch) {
@@ -59576,6 +59588,8 @@
 	      var formData = 'name=' + name + '&email=' + email + '&password=' + password;
 
 	      this.props.signUp(formData);
+	      this.props.clearRequest();
+	      this.props.clearSuccessAndErrors();
 	    }
 	  }, {
 	    key: 'render',
@@ -59700,7 +59714,9 @@
 	  classes: _propTypes2.default.object.isRequired,
 	  authenticationReducer: _propTypes2.default.object.isRequired,
 	  setSignUpRequest: _propTypes2.default.func.isRequired,
-	  signUp: _propTypes2.default.func.isRequired
+	  signUp: _propTypes2.default.func.isRequired,
+	  clearRequest: _propTypes2.default.func.isRequired,
+	  clearSuccessAndErrors: _propTypes2.default.func.isRequired
 	};
 
 	function mapStateToProps(state) {

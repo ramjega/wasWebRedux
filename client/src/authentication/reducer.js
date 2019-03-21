@@ -26,6 +26,12 @@ export default function reducer(state = {
     case 'SET_SIGN_IN_REQUEST':
       return {...state, signInRequest: action.payload};
 
+    case 'CLEAR_REQUEST':
+      return {...state, signInRequest: {email: '',password: ''}, signUpRequest: {name:'', email: '', password: ''}};
+
+    case 'CLEAR_SUCCESS_AND_ERRORS':
+      return {...state, success: {}, errors: {summary: ''}};
+
 
     case 'SIGN_UP_PENDING': {
       return {...state, mutateState: 1}
