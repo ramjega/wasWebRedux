@@ -3,16 +3,23 @@ const bcrypt = require('bcrypt');
 
 // define the User model schema
 const UserSchema = new mongoose.Schema({
-    email: {type: String, index: {unique: true}},
-    password: String,
-    group: String,
-    createdTime: Number,
-    modifiedTime: Number,
-    status: String,
-    name: String,
-    mobileNumber: Number,
-    address: String,
-    city: String
+  // mandatory
+  name: String,
+  email: {type: String, index: {unique: true}},
+  password: String,
+
+  // client automated
+  createdTime: Number,
+  modifiedTime: Number,
+
+  // server automated
+  group: String,
+  status: String,
+
+  // additional
+  mobileNumber: Number,
+  address: String,
+  city: String
 
 });
 
@@ -24,7 +31,7 @@ const UserSchema = new mongoose.Schema({
  * @returns {object} callback
  */
 UserSchema.methods.comparePassword = function comparePassword(password, callback) {
-    bcrypt.compare(password, this.password, callback);
+  bcrypt.compare(password, this.password, callback);
 };
 
 
@@ -32,28 +39,28 @@ UserSchema.methods.comparePassword = function comparePassword(password, callback
  * The pre-save hook method.
  */
 UserSchema.pre('save', function saveHook(next) {
-    const user = this;
+  const user = this;
 
-    // proceed further only if the password is modified or the user is new
-    if (!user.isModified('password')) return next();
+  // proceed further only if the password is modified or the user is new
+  if (!user.isModified('password')) return next();
 
 
-    return bcrypt.genSalt((saltError, salt) => {
-        if (saltError) {
-            return next(saltError);
-        }
+  return bcrypt.genSalt((saltError, salt) => {
+    if (saltError) {
+      return next(saltError);
+    }
 
-        return bcrypt.hash(user.password, salt, (hashError, hash) => {
-            if (hashError) {
-                return next(hashError);
-            }
+    return bcrypt.hash(user.password, salt, (hashError, hash) => {
+      if (hashError) {
+        return next(hashError);
+      }
 
-            // replace a password string with hash value
-            user.password = hash;
+      // replace a password string with hash value
+      user.password = hash;
 
-            return next();
-        });
+      return next();
     });
+  });
 });
 
 
