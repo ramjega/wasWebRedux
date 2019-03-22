@@ -1,6 +1,6 @@
 import Auth from '../modules/Auth';
 
-let authenticationSource = {
+const authenticationSource = {
 
   signUp: function (vairables) {
     return new Promise((resolve, reject) => {

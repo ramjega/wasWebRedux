@@ -20,6 +20,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Auth from '../../modules/Auth';
+import ListDividers from "./ListDividers";
 
 const styles = theme => ({
   root: {
@@ -146,16 +147,8 @@ class Header extends React.Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose.bind(this)}
       >
-        {Auth.isUserAuthenticated() ?
-          <div>
-            <Link><MenuItem onClick={this.handleMenuClose.bind(this)}>{user.name}</MenuItem></Link>
-            < Link to="/logout"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Out</MenuItem></Link>
-          </div> :
-        <div>
-          <Link to="/signIn"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign In</MenuItem></Link>
-          < Link to="/signUp"><MenuItem onClick={this.handleMenuClose.bind(this)}>Sign Up</MenuItem></Link>
-        </div>
-        }
+        <ListDividers userName={Auth.isUserAuthenticated() ? user.name : ''}/>
+
       </Menu>
     );
 

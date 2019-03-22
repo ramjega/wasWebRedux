@@ -3,6 +3,7 @@ import SignInPage from "./authentication/components/SignInPage";
 import SignUpPage from "./authentication/components/SignUpPage";
 import Home from "./base/components/Home";
 import Auth from "./modules/Auth";
+import CreateWorker from "./worker/components/CreateWorker";
 
 
 const routes = {
@@ -33,7 +34,19 @@ const routes = {
         // change the current URL to /
         replace('/');
       }
-    }
+    },
+
+    {
+      path: '/createWorker',
+      getComponent: (location, callback) => {
+        if (Auth.isUserAuthenticated()) {
+          callback(null, CreateWorker);
+        } else {
+          callback(null, SignInPage);
+        }
+      }
+    },
+
 
 
 

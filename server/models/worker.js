@@ -5,8 +5,9 @@ let WorkerSchema = new mongoose.Schema({
     createdTime: Number,
     modifiedTime: Number,
     status: String,  // initial, active , suspended
-    rating: Number,
+    rating: String,
     job: String,
+    mobileNumber: String,
     experience: String,
     paymentInfo: String,
     notes: String

@@ -6,11 +6,15 @@ const Appointment = require('mongoose').model('Appointment');
 const router = new express.Router();
 
 //======== post methods
-router.post('/worker', (req, res, next) => {
+router.post('/create/worker', (req, res, next) => {
     const data = req.body;
     const newWorker = new Worker(data);
     newWorker.save((err) => {
         if (err) {
+          return res.status(400).json({
+            success: false,
+            message: 'Could not process the form.'
+          });
         }
         return res.json({
             success: true,
