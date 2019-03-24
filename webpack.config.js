@@ -2,9 +2,11 @@ const path = require('path');
 
 
 module.exports = {
+  mode: 'development',
   // the entry file for the bundle
   entry: path.join(__dirname, '/client/src/index.js'),
 
+  devtool: 'inline-source-map',
   // the bundle file we will get in the result
   output: {
     path: path.join(__dirname, '/client/dist/js'),

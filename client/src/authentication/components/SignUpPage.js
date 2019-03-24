@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import {Link} from 'react-router';
+import {browserHistory, Link} from 'react-router';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
@@ -68,6 +68,14 @@ class SignUpPage extends React.Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.authenticationReducer.mutateState === 1 && nextProps.authenticationReducer.mutateState === 2) {
+      browserHistory.push("/signIn");
+      this.props.clearRequest();
+      this.props.clearSuccessAndErrors();
+    }
+  }
+
   onInputChange(event) {
     const field = event.target.name;
     const {signUpRequest} = this.props.authenticationReducer;
@@ -87,8 +95,6 @@ class SignUpPage extends React.Component {
     const formData = `name=${name}&email=${email}&password=${password}&createdTime=${createdTime}`;
 
     this.props.signUp(formData);
-    this.props.clearRequest();
-    this.props.clearSuccessAndErrors();
   }
 
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import {Link} from 'react-router';
 import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
 import Paper from "@material-ui/core/Paper/Paper";
 import Avatar from "@material-ui/core/Avatar/Avatar";
@@ -9,8 +8,6 @@ import Typography from "@material-ui/core/Typography/Typography";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import * as WorkerActions from "../../worker/actions";
@@ -18,6 +15,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
 import moment from "moment";
 import Auth from "../../modules/Auth";
+import {browserHistory} from "react-router";
 
 const styles = theme => ({
   main: {
@@ -69,6 +67,13 @@ class CreateWorker extends React.Component {
     this.onFormSubmit = this.onFormSubmit.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.workerReducer.mutateState === 1 && nextProps.workerReducer.mutateState === 2) {
+      browserHistory.push("/");
+      this.props.clearRequest();
+    }
+  }
+
   onInputChange(event) {
     const field = event.target.name;
     const {workerRequest} = this.props.workerReducer;
@@ -96,7 +101,7 @@ class CreateWorker extends React.Component {
     const formData = `job=${job}&experience=${experience}&paymentInfo=${paymentInfo}&mobileNumber=${mobileNumber}&notes=${notes}`;
     const additionalData = `&userId=${userId}&status=${status}&rating=${rating}&createdTime=${createdTime}`;
 
-    this.props.createWorker(formData+additionalData);
+    this.props.createWorker(formData + additionalData);
   }
 
 
@@ -121,25 +126,26 @@ class CreateWorker extends React.Component {
 
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="job">Job</InputLabel>
-                <Input  onChange={this.onInputChange} id="name" value={workerRequest.job} name="job"
-                       autoComplete="User name" autoFocus/>
+              <Input onChange={this.onInputChange} id="name" value={workerRequest.job} name="job"
+                     autoComplete="User name" autoFocus/>
             </FormControl>
 
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="experience">Working Experience</InputLabel>
-                <Input  onChange={this.onInputChange} id="experience" value={workerRequest.experience} name="experience"
-                        autoComplete="Working Experience" autoFocus/>
+              <Input onChange={this.onInputChange} id="experience" value={workerRequest.experience} name="experience"
+                     autoComplete="Working Experience" autoFocus/>
             </FormControl>
 
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="paymentInfo">Payment Information</InputLabel>
-                <Input onChange={this.onInputChange} name="paymentInfo" id="paymentInfo" value={workerRequest.paymentInfo}
-                       autoComplete="Payment Information" autoFocus/>
+              <Input onChange={this.onInputChange} name="paymentInfo" id="paymentInfo" value={workerRequest.paymentInfo}
+                     autoComplete="Payment Information" autoFocus/>
             </FormControl>
 
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="mobileNumber">Mobile Number</InputLabel>
-              <Input  onChange={this.onInputChange} name="mobileNumber" id="mobileNumber" type="number"  value={workerRequest.mobileNumber}
+              <Input onChange={this.onInputChange} name="mobileNumber" id="mobileNumber" type="number"
+                     value={workerRequest.mobileNumber}
                      autoComplete="Mobile Number" autoFocus/>
             </FormControl>
 

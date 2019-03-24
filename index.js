@@ -27,6 +27,12 @@ const authCheckMiddleware = require('./server/middleware/auth-check');
 app.use('/api', authCheckMiddleware);
 
 // routes
+
+const authRoutes = require('./server/routes/auth');
+const apiRoutes = require('./server/routes/api');
+app.use('/auth', authRoutes);
+app.use('/api', apiRoutes);
+
 app.get('/*', function(req, res) {
   res.sendFile(path.join(__dirname, './server/static/index.html'), function(err) {
     if (err) {
@@ -34,12 +40,6 @@ app.get('/*', function(req, res) {
     }
   })
 });
-const authRoutes = require('./server/routes/auth');
-const apiRoutes = require('./server/routes/api');
-app.use('/auth', authRoutes);
-app.use('/api', apiRoutes);
-
-
 // start the server
 app.listen( process.env.PORT || 3000, () => {
   console.log('Server is running on http://localhost:3000 or http://127.0.0.1:3000');

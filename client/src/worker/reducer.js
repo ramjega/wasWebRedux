@@ -9,6 +9,8 @@ export default function reducer(state = {
     mobileNumber: '',
     notes: ''
   },
+  workers: [],
+  fetchState: 0,
   mutateState: 0
 
 }, action) {
@@ -24,11 +26,21 @@ export default function reducer(state = {
       return {...state, mutateState: 1}
     }
     case 'CREATE_WORKER_FULFILLED': {
-      browserHistory.push("/");
       return {...state, mutateState: 2, success: action.payload}
     }
     case 'CREATE_WORKER_REJECTED': {
       return {...state, mutateState: 3, errors: action.payload}
+    }
+
+    case 'FETCH_WORKERS_PENDING': {
+      return {...state, fetchState: 1}
+    }
+    case 'FETCH_WORKERS_FULFILLED': {
+      browserHistory.push("/");
+      return {...state, fetchState: 2, workers: action.payload}
+    }
+    case 'FETCH_WORKERS_REJECTED': {
+      return {...state, fetchState: 3, errors: action.payload}
     }
 
     default:

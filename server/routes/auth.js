@@ -158,9 +158,16 @@ router.get('/workers', (req, res) => {
     const item = req.body;
     return Worker.find(item ? item : {}, (err, result) => {
         if (err) {
+          return res.status(400).json({
+            success: false,
+            message: 'Could not process the form.'
+          });
         }
 
-        res.send(result);
+      return res.json({
+        success: true,
+        workers: result
+      });
 
     });
 

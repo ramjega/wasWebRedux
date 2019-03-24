@@ -10,3 +10,10 @@ export function createWorker(variables) {
   }
 
 }
+
+export function fetchWorkers() {
+  return function (dispatch) {
+    dispatch({type: 'FETCH_WORKERS', payload:  workerSource.fetchWorkers()});
+  }
+
+}
