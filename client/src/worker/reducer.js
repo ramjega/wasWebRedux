@@ -1,5 +1,3 @@
-import {browserHistory} from 'react-router'
-
 export default function reducer(state = {
 
   workerRequest: {
@@ -16,6 +14,9 @@ export default function reducer(state = {
 }, action) {
   switch (action.type) {
     case 'SET_WORK_REQUEST':
+      return {...state, workerRequest: action.payload};
+
+    case 'SET_APPOINTMENT_REQUEST':
       return {...state, workerRequest: action.payload};
 
     case 'CLEAR_REQUEST':
@@ -36,7 +37,6 @@ export default function reducer(state = {
       return {...state, fetchState: 1}
     }
     case 'FETCH_WORKERS_FULFILLED': {
-      browserHistory.push("/");
       return {...state, fetchState: 2, workers: action.payload}
     }
     case 'FETCH_WORKERS_REJECTED': {

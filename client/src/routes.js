@@ -4,6 +4,7 @@ import SignUpPage from "./authentication/components/SignUpPage";
 import Home from "./base/components/Home";
 import Auth from "./modules/Auth";
 import CreateWorker from "./worker/components/CreateWorker";
+import CreateAppointment from "./appointment/components/CreateAppointment";
 
 
 const routes = {
@@ -41,6 +42,17 @@ const routes = {
       getComponent: (location, callback) => {
         if (Auth.isUserAuthenticated()) {
           callback(null, CreateWorker);
+        } else {
+          callback(null, SignInPage);
+        }
+      }
+    },
+
+    {
+      path: '/createAppointment',
+      getComponent: (location, callback) => {
+        if (Auth.isUserAuthenticated()) {
+          callback(null, CreateAppointment);
         } else {
           callback(null, SignInPage);
         }

@@ -21,6 +21,14 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Auth from '../../modules/Auth';
 import ListDividers from "./ListDividers";
+import List from "@material-ui/core/List/List";
+import ListItem from "@material-ui/core/ListItem/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon/ListItemIcon";
+import InboxIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import ListItemText from "@material-ui/core/ListItemText/ListItemText";
+import Divider from "@material-ui/core/Divider/Divider";
+import Button from "@material-ui/core/Button/Button";
+import Drawer from "@material-ui/core/Drawer/Drawer";
 
 const styles = theme => ({
   root: {
@@ -100,6 +108,12 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
 });
 
 class Header extends React.Component {
@@ -107,6 +121,7 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      left: false,
       anchorEl: null,
       mobileMoreAnchorEl: null,
     };
@@ -128,6 +143,12 @@ class Header extends React.Component {
 
   handleMobileMenuClose() {
     this.setState({mobileMoreAnchorEl: null});
+  };
+
+  toggleDrawer(side, open) {
+    this.setState({
+      [side]: open,
+    });
   };
 
   render() {
@@ -185,11 +206,33 @@ class Header extends React.Component {
       </Menu>
     );
 
+    const sideList = (
+      <div className={classes.list}>
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+              <ListItemText primary={text}/>
+            </ListItem>
+          ))}
+        </List>
+        <Divider/>
+        <List>
+          {['All mail', 'Trash', 'Spam'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+              <ListItemText primary={text}/>
+            </ListItem>
+          ))}
+        </List>
+      </div>
+    );
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton onClick={this.toggleDrawer.bind(this,'left', true)} className={classes.menuButton} color="inherit" aria-label="Open drawer">
               <MenuIcon/>
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
@@ -242,9 +285,25 @@ class Header extends React.Component {
         </AppBar>
         {renderMenu}
         {renderMobileMenu}
+         <div>
+           <div>
+             <Drawer open={this.state.left} onClose={this.toggleDrawer.bind(this,'left', false)}>
+               <div
+                 tabIndex={0}
+                 role="button"
+                 onClick={this.toggleDrawer.bind(this,'left', false)}
+                 onKeyDown={this.toggleDrawer.bind(this,'left', false)}
+               >
+                 {sideList}
+               </div>
+             </Drawer>
+           </div>
+         </div>
 
         {this.props.children}
       </div>
+
+
     );
   }
 }

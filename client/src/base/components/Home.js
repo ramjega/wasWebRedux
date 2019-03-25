@@ -1,21 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import CssBaseline from "@material-ui/core/CssBaseline/CssBaseline";
-import Paper from "@material-ui/core/Paper/Paper";
-import Avatar from "@material-ui/core/Avatar/Avatar";
-import AddIcon from '@material-ui/icons/Add';
-import Typography from "@material-ui/core/Typography/Typography";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Input from "@material-ui/core/Input/Input";
-import Button from "@material-ui/core/Button/Button";
 import withStyles from "@material-ui/core/styles/withStyles";
 import * as WorkerActions from "../../worker/actions";
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
-import moment from "moment";
-import Auth from "../../modules/Auth";
-import RecipeReviewCard from "../../worker/components/RecipeReviewCard";
+import RecipeReviewCard from "../../worker/components/WorkerCard";
+import LinearIndeterminate from '../../common/components/LineLoadingBar'
+import TemporaryDrawer from '../../common/components/TemporaryDrawer'
 
 const styles = theme => ({
   main: {
@@ -66,12 +57,19 @@ class Home extends React.Component {
 
   render() {
     const {classes} = this.props;
-    const {workers} = this.props.workerReducer;
+    const {workers, fetchState} = this.props.workerReducer;
 
     return (
 
       <div className="container-fluid">
+        <br/>
+        {fetchState === 1 &&
+        <LinearIndeterminate/>
+        }
         <center><h1>Home page</h1></center>
+        {fetchState === 2 &&
+        <TemporaryDrawer/>
+        }
         <div className="col-sm-12">
           <div className="row">
             {
